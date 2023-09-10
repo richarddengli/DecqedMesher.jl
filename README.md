@@ -16,6 +16,3 @@ The development for ``DecqedMesher`` started during the 2022 Undergraduate Resea
 - Qiskit Community Team, IBM Quantum
 
 We also thank Abeer Vaishnav, Nathalie de Leon, Hwajung Kang, and the rest of the 2022 QURIP cohort for their support.
-
-# Notes
-- Package generated using `PkgTemplates.jl`
