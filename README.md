@@ -1,6 +1,6 @@
 # DecqedMesher
 
-[![Build Status](https://github.com/richarddengli/DecqedMesher.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/richarddengli/DecqedMesher.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Build Status](https://github.com/richarddengli/DecqedMesher.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/richarddengli/DecqedMesher.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/richarddengli/DecqedMesher.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/richarddengli/DecqedMesher.jl)
 
 
