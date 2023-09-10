@@ -4,9 +4,9 @@
 [![Coverage](https://codecov.io/gh/richarddengli/DecqedMesher.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/richarddengli/DecqedMesher.jl)
 
 **DecqedMesher** is a Julia package for constructing primal and dual mesh objects present in tbe discrete exterior calculus formulation of quantum electrodynamics (DEC-QED) as detailed in the following papers:
-- [Flux-based three-dimensional electrodynamic modeling approach to superconducting circuits and materials]([https://link-url-here.org]([https://github.com/dnpham23/DEC-QED](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.107.053704))
+- [Flux-based three-dimensional electrodynamic modeling approach to superconducting circuits and materials](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.107.053704)
 
-Eventually, **DecqedMesher** will be integrated into the larger [**DEC-QED computational toolbox**]([https://link-url-here.org](https://github.com/dnpham23/DEC-QED). Both packages are under active development.
+Eventually, **DecqedMesher** will be integrated into the larger [**DEC-QED computational toolbox**](https://github.com/dnpham23/DEC-QED). Both **DecqedMesher** and **DEC-QED computational toolbox** are under active development.
 
 # Authors and Acknowledgements
 Richard Li, Dzung Pham, Nick Bronn, Thomas McConkey, Olivia Lanes, Hakan Türeci
