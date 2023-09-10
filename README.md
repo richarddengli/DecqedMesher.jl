@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/richarddengli/DecqedMesher.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/richarddengli/DecqedMesher.jl)
 
-``DecqedMesher`` is a Julia package for constructing primal and dual mesh objects present in the discrete exterior calculus formulation of quantum electrodynamics (DEC-QED). The theory of DEC-QED as well as its applications are laid out in the following papers:
+``DecqedMesher`` is a Julia package for constructing primal and dual mesh objects present in the discrete exterior calculus formulation of quantum electrodynamics (DEC-QED). The theory and applications of DEC-QED are laid out in the following papers:
 - [Flux-based three-dimensional electrodynamic modeling approach to superconducting circuits and materials](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.107.053704)
 
 Eventually, ``DecqedMesher`` will be integrated into the larger [``DEC-QED computational toolbox``](https://github.com/dnpham23/DEC-QED). Both ``DecqedMesher`` and ``DEC-QED computational toolbox`` are under active development.
@@ -11,7 +11,7 @@ Eventually, ``DecqedMesher`` will be integrated into the larger [``DEC-QED compu
 # Authors and Acknowledgements
 Richard Li, Dzung Pham, Nick Bronn, Thomas McConkey, Olivia Lanes, Hakan Türeci
 
-**DecqedMesher** began as development during the 2022 Undergraduate Research Internship at IBM and Princeton (QURIP), as part of a collaboration between the following groups:
+The development for ``DecqedMesher`` started during the 2022 Undergraduate Research Internship at IBM and Princeton (QURIP), as part of a collaboration between the following groups:
 - Türeci Group, Department of Electrical & Computer Engineering, Princeton University
 - Qiskit Community Team, IBM Quantum
 
