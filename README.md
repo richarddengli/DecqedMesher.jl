@@ -1,6 +1,6 @@
 # DecqedMesher
 
-[![Build Status](https://github.com/richarddengli/DecqedMesher.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/richarddengli/DecqedMesher.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Build Status](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/richarddengli/DecqedMesher.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/richarddengli/DecqedMesher.jl)
 
 
@@ -121,3 +121,5 @@ We also thank Abeer Vaishnav, Nathalie de Leon, Hwajung Kang, and the rest of th
 - Quantize EM field, i.e. fully quantum model. Need to first do the semiclassical mesh then quantize EM operators.
 - incorporate with larger DEC-QED repo
 - first get minimally working program then polish up stuff like modules
+
+- Package generated using `PkgTemplates.jl`
