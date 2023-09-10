@@ -3,8 +3,6 @@
 [![Build Status](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/richarddengli/DecqedMesher.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/richarddengli/DecqedMesher.jl)
 
-
-# DecqedMesher
 A program for constructing primal and dual mesh objects to be used in discrete exterior calculus simulations. 
 
 This work is done as part of the Undergraduate Research Internship at IBM and Princeton (QURIP). 
