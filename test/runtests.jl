@@ -1,6 +1,6 @@
-using DECQED-mesher
+using DecqedMesher
 using Test
 
-@testset "DECQED-mesher.jl" begin
+@testset "DecqedMesher.jl" begin
     # Write your tests here.
 end
