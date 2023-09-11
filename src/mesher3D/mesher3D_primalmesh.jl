@@ -244,4 +244,4 @@ end
 end
 
 # test
-@time primalmesh = Mesher3D_Primalmesh.complete_primalmesh(raw"/meshes/transfinite_test.msh")
+# @time primalmesh = Mesher3D_Primalmesh.complete_primalmesh(raw"/meshes/transfinite_test.msh")

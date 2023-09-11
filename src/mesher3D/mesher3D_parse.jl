@@ -26,6 +26,8 @@ function getfilepath(file::String)::String
     parentdir = string(pwd())
     filepath = parentdir * file
 
+    return filepath
+
 end
 
 
@@ -443,4 +445,4 @@ end
 
 
 # test
-Mesher3D_Parse.parsefile("/meshes/transfinite_test.msh")
+# Mesher3D_Parse.parsefile("/meshes/transfinite_test.msh")

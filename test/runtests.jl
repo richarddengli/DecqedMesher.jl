@@ -1,6 +1,10 @@
-using DecqedMesher
+using .DecqedMesher
 using Test
 
-@testset "DecqedMesher.jl" begin
-    # Write your tests here.
+
+using .Mesher3D_Parse
+@testset "Parsing" begin
+    
+    @test Mesher3D_Parse.getfilepath("/meshes/transfinite_test.msh") == "/Users/RichardLi/Desktop/QURIP/qurip_code/DecqedMesher.jl/meshes/transfinite_test.msh"
+
 end
