@@ -1,6 +1,5 @@
-using .DecqedMesher
+using DecqedMesher
 using Test
-
 
 using .Mesher3D_Parse
 @testset "Parsing" begin

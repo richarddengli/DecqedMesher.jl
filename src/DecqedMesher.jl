@@ -16,7 +16,7 @@ print(filepath)
 #print(test)
 
 # the following exports are those made available to the user
-export Mesher3D_Types, Mesher3D_Parse
+export Mesher3D_Types, Mesher3D_Parse, DecqedMesher
 
 
 
