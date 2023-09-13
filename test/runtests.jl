@@ -4,7 +4,8 @@ using Test
 @testset "3D Primal Mesh" begin
 
     # the test 3D mesh file is "3D_testmesh.msh"
-    primalmesh, physicalnames_dict, all_entities_struct = DecqedMesher.Mesher3D_Primalmesh.complete_primalmesh("/meshes/3D_testmesh.msh") 
+    # note the below line will only work when `pkg test`` is run (or equivalent) due to the additional "/test" appended to the file path when testing in this manner
+    primalmesh, physicalnames_dict, all_entities_struct = DecqedMesher.Mesher3D_Primalmesh.complete_primalmesh("/meshes/3D_testmesh.msh")  
 
     # checking primalmesh
     # checking primal node whose id is 1
@@ -32,4 +33,5 @@ end
     @test 1 == 1
 
 end
+
 
