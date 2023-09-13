@@ -136,7 +136,7 @@ Returns the 4 completed primal mesh dictionaries.
 Same as complete_primalmesh, except the dict for the highest-dimensional
 obect is facedict_2D rather than tetdict.
 """
-function complete_primalmesh(file::String)
+function complete_primalmesh_2D(file::String)
     
     # reads in the raw info from Gmsh
     nodedict, facedict_2D, physicalnames_dict, all_entities_struct = parsefile(file)

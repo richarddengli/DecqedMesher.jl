@@ -281,9 +281,9 @@ function parsenodes_2(fileinstance::IOStream, all_entities_struct::All_entities_
                         end
                     end
                 end
-                entities_dict[1] = curvetags
-                entities_dict[2] = surfacetags
-                entities_dict[3] = volumetags
+                entities_dict[1] = sort(curvetags)
+                entities_dict[2] = sort(surfacetags)
+                entities_dict[3] = sort(volumetags)
             elseif root_entitydim == 1
                 surfacetags = []
                 for ksurface in keys(all_entities_struct.surface_entities_dict)
@@ -300,8 +300,8 @@ function parsenodes_2(fileinstance::IOStream, all_entities_struct::All_entities_
                     end
                 end
                 entities_dict[1] = [root_entityid]
-                entities_dict[2] = surfacetags
-                entities_dict[3] = volumetags
+                entities_dict[2] = sort(surfacetags)
+                entities_dict[3] = sort(volumetags)
             elseif root_entitydim == 2
                 volumetags = []
                 for kvolume in keys(all_entities_struct.volume_entities_dict)
@@ -311,7 +311,7 @@ function parsenodes_2(fileinstance::IOStream, all_entities_struct::All_entities_
                 end
                 entities_dict[1] = [0]
                 entities_dict[2] = [root_entityid]
-                entities_dict[3] = volumetags
+                entities_dict[3] = sort(volumetags)
             elseif root_entitydim == 3
                 entities_dict[1] = [0]
                 entities_dict[2] = [0]

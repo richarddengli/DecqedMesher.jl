@@ -184,8 +184,8 @@ function parsenodes_2_2D(fileinstance::IOStream, all_entities_struct_2D::All_ent
                         end
                     end
                 end
-                entities_dict[1] = curvetags
-                entities_dict[2] = surfacetags
+                entities_dict[1] = sort(curvetags)
+                entities_dict[2] = sort(surfacetags)
             elseif root_entitydim == 1
                 surfacetags = []
                 for ksurface in keys(all_entities_struct_2D.surface_entities_dict)
@@ -194,7 +194,7 @@ function parsenodes_2_2D(fileinstance::IOStream, all_entities_struct_2D::All_ent
                     end
                 end
                 entities_dict[1] = [root_entityid]
-                entities_dict[2] = surfacetags
+                entities_dict[2] = sort(surfacetags)
             elseif root_entitydim == 2
                 entities_dict[1] = [0]
                 entities_dict[2] = [root_entityid]

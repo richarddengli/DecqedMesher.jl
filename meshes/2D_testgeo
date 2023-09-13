@@ -1,0 +1,19 @@
+// Gmsh project created on Sat Jul 29 09:46:27 2023
+
+lc = 3e-1;
+
+Point(1) = {0, 0, 0, lc};
+Point(2) = {1, 0,  0, lc};
+Point(3) = {0, 1, 0, lc};
+Point(4) = {1,  1, 0, lc};
+
+Line(1) = {1, 2};
+Line(2) = {2, 4};
+Line(3) = {4, 3};
+Line(4) = {3, 1};
+
+Curve Loop(1) = {1, 2, 3, 4};
+Plane Surface(1) = {1};
+
+Physical Curve("boundary") = {1, 2, 3, 4};
+Physical Surface("bulk") = {1};

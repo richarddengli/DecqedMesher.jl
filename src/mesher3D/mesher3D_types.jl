@@ -72,9 +72,9 @@ mutable struct Nodestruct
     root_entitydim::Int # MshFileVersion 4.1
     root_entityid::Int
     entities_dict::Dict{Int, Vector{}} 
-    # entities_dict values are:
-    # - (for 3D mesh) length 3 vector of vectors: [[curvetags], [surfacetags], [volumetags]]
-    # - (for 2D mesh) length 2 vector of vectors: [[curvetags], [surfacetags]]
+    # entities_dict has the following structure:
+    # - (for 3D mesh) 3 keys-value pairs:[1->[curvetags], 2->[surfacetags], 3->[volumetags]]
+    # - (for 2D mesh) 2 key-value pairs: [1->[curvetags], 2->[surfacetags]]
     Nodestruct() = new()
 end
 
@@ -84,6 +84,9 @@ mutable struct Edgestruct
     id::SVector{2, Int} # ordered by ascending node id 
     length::Float64
     entities_dict::Dict{Int,Vector{}}
+    # entities_dict has the following structure:
+    # - (for 3D mesh) 3 keys-value pairs:[1->[root_entityid], 2->[surfacetags], 3->[volumetags]]
+    # - (for 2D mesh) 2 key-value pairs: [1->[root_entityid], 2->[surfacetags]]
     supportvolume::Float64 
     Edgestruct() = new()
 end

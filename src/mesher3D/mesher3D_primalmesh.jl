@@ -1,7 +1,7 @@
 # This file implements the functionality to create the complete primal mesh.
 
 module Mesher3D_Primalmesh
-export gettetvol, getedgelen, getfacearea, complete_update_tet, edge2entities_map, complete_primalmesh
+export getedgelen, getfacearea, gettetvol, complete_update_tet, edge2entities_map, complete_primalmesh
 
 using ..Mesher3D_Types
 using ..Mesher3D_Parse
