@@ -47,7 +47,7 @@ end
 
 @testset "mesher3D_dualmesh.jl" begin
 
-    dualmesh, primalmesh = complete_dualmesh(testfile_3D)  
+    dualmesh, primalmesh, physicalnames_dict, all_entities_struct = complete_dualmesh(testfile_3D)  
 
     # checking high-level info
         @test length(dualmesh.dualnodedicts.interior_dualnodedict) == length(primalmesh.tetdict)

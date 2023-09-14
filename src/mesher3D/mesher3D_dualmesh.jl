@@ -128,7 +128,7 @@ function get_circumcenter_face(face::Facestruct,
                         (2 * norm(cross(b-a, c-a))^2)
                     end 
     
-                    return circumcenter 
+    return circumcenter 
 
 end
 
@@ -1664,7 +1664,7 @@ Returns all completed dual mesh dictionaries.
 """
 function complete_dualmesh(file::String)
 
-    primalmesh, _, _ = complete_primalmesh(file)
+    primalmesh, physicalnames_dict, all_entities_struct = complete_primalmesh(file)
 
     nodedict = primalmesh.nodedict
     edgedict = primalmesh.edgedict
@@ -1676,23 +1676,15 @@ function complete_dualmesh(file::String)
     # create dualnodedicts & insert into dual mesh
     dualnodedicts = create_dualnodedicts(nodedict, edgedict, facedict, tetdict)
     dualmesh.dualnodedicts = dualnodedicts
-    
+
     # create dualedgedicts & insert into dual mesh
-    dualedgedicts = Dualedgedicts_struct()
-    dualedgedicts.interior_dualedgedict = create_interior_dualedgedict(facedict, 
-                                                                       tetdict,
-                                                                       dualnodedicts.interior_dualnodedict,
-                                                                       dualnodedicts.boundary_dualnodedict)
-    dualedgedicts.boundary_dualedgedict = create_boundary_dualedgedict(dualnodedicts.interior_dualnodedict, 
-                                                                       dualnodedicts.boundary_dualnodedict)
-
-    dualedgedicts.auxiliary_onprimaledge_dualedgedict = create_auxiliary_onprimaledge_dualedgedict(nodedict, 
-                                                                                                   dualnodedicts.auxiliary_dualnodedict)
-    dualedgedicts.auxiliary_onprimalface_dualedgedict = create_auxiliary_onprimalface_dualedgedict(facedict, 
-                                                                                                   dualnodedicts.boundary_dualnodedict, 
-                                                                                                   dualnodedicts.auxiliary_dualnodedict)
-
-    dualmesh.dualedgedicts = dualedgedicts
+    dualedgedicts = create_dualedgedicts(nodedict, 
+                                         facedict,
+                                         tetdict,
+                                         dualnodedicts.interior_dualnodedict,
+                                         dualnodedicts.boundary_dualnodedict,
+                                         dualnodedicts.auxiliary_dualnodedict)
+    dualmesh.dualedgedicts = dualedgedicts                                 
 
     # create dualfacedicts & insert into dual mesh
     dualfacedicts = Dualfacedicts_struct()
@@ -1731,7 +1723,7 @@ function complete_dualmesh(file::String)
     # update edgedict
     primalmesh.edgedict = edgedict
 
-    return dualmesh, primalmesh
+    return dualmesh, primalmesh, physicalnames_dict, all_entities_struct
 
 end
 ########################################### END DUAL MESH ###########################################
