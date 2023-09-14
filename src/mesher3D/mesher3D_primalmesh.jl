@@ -29,6 +29,7 @@ function getedgelen(nodedict::Dict{Int, Nodestruct}, edge::Edgestruct)::Float64
     # calculate length
     vec = node1coords - node2coords
     length = norm(vec)
+    
     return length
 
 end
@@ -50,6 +51,7 @@ function getfacearea(nodedict::Dict{Int, Nodestruct}, face::Facestruct)::Float64
     vec1 = node2coords - node1coords
     vec2 = node3coords - node1coords
     area = 1/2 * norm(cross(vec1, vec2))
+    
     return area
 
 end
@@ -78,6 +80,7 @@ function gettetvol(nodedict::Dict{Int, Nodestruct}, tet::Tetstruct)::Float64
     b = node3_coords - node1_coords
     c = node4_coords - node1_coords
     volume = 1/6 * abs(dot(cross(a, b), c))
+    
     return volume
 
 end
@@ -242,6 +245,3 @@ function complete_primalmesh(file::String)
 end
 
 end
-
-# test
-# @time primalmesh = Mesher3D_Primalmesh.complete_primalmesh(raw"/meshes/transfinite_test.msh")

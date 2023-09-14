@@ -23,7 +23,7 @@ This function concatenates the path referencing the parent directory to the path
 """
 function getfilepath(file::String)::String
 
-    parentdir = string(pwd())
+    parentdir = string(pwd()) 
     filepath = parentdir * file
 
     return filepath
@@ -173,8 +173,6 @@ function parse_entities_2(fileinstance::IOStream)::All_entities_struct
         volume_tag = parse(Int, entitydata[1])
         num_physicaltags = parse(Int, entitydata[8])
         num_boundingSurfaces = parse(Int, entitydata[9+num_physicaltags])
-
-        println(num_physicaltags)
         
         physicaltags = []
         if num_physicaltags != 0
@@ -191,6 +189,7 @@ function parse_entities_2(fileinstance::IOStream)::All_entities_struct
         volume_entity_struct.boundingsurfaces = boundingSurfaces
 
         volume_entities_dict[volume_tag] = volume_entity_struct
+
     end
 
     # insert dicts into struct
@@ -441,8 +440,4 @@ function parsefile(file::String)::Vector{Any}
 
 end
 
-end 
-
-
-# test
-# Mesher3D_Parse.parsefile("/meshes/transfinite_test.msh")
+end

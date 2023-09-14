@@ -8,6 +8,14 @@
 
 Eventually, ``DecqedMesher`` will be integrated into the larger [``DEC-QED computational toolbox``](https://github.com/dnpham23/DEC-QED). Both ``DecqedMesher`` and ``DEC-QED computational toolbox`` are under active development.
 
+# Installation
+
+Dependencies: 
+StaticArrays, Combinatorics, Combinatorics, LinearAlgebra, Revise
+
+# Usage
+
+
 # Authors and Acknowledgements
 Richard Li, Dzung Pham, Nick Bronn, Thomas McConkey, Olivia Lanes, Hakan Türeci
 
