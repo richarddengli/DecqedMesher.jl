@@ -1674,18 +1674,9 @@ function complete_dualmesh(file::String)
     dualmesh = Dualmeshstruct()
 
     # create dualnodedicts & insert into dual mesh
-    dualnodedicts = Dualnodedicts_struct()
-    dualnodedicts.interior_dualnodedict = create_interior_dualnodedict(nodedict, 
-                                                                       tetdict)
-    dualnodedicts.boundary_dualnodedict = create_boundary_dualnodedict(nodedict, 
-                                                                       facedict, 
-                                                                       tetdict)
-    dualnodedicts.auxiliary_dualnodedict = create_auxiliary_dualnodedict(nodedict, 
-                                                                         edgedict, 
-                                                                         dualnodedicts.boundary_dualnodedict)
-
-    dualmesh.dualnodedicts =  dualnodedicts
-
+    dualnodedicts = create_dualnodedicts(nodedict, edgedict, facedict, tetdict)
+    dualmesh.dualnodedicts = dualnodedicts
+    
     # create dualedgedicts & insert into dual mesh
     dualedgedicts = Dualedgedicts_struct()
     dualedgedicts.interior_dualedgedict = create_interior_dualedgedict(facedict, 
