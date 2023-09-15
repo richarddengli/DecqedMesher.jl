@@ -5,8 +5,8 @@ include("./mesher3D/mesher3D_parse.jl")
 include("./mesher3D/mesher3D_primalmesh.jl")
 include("./mesher3D/mesher3D_dualmesh.jl")
 
-using .Mesher3D_Dualmesh
 # complete_dualmesh is exported from Mesher3D_Dualmesh into DecqedMesher
+using .Mesher3D_Dualmesh:complete_dualmesh
 
 # now export complete_dualmesh from DecqedMesher into the importing module, directly available in the global scope of the importing module:
 export complete_dualmesh
@@ -26,5 +26,6 @@ include("./mesher2D/mesher2D_parse.jl")
 include("./mesher2D/mesher2D_primalmesh.jl")
 include("./mesher2D/mesher2D_dualmesh.jl")
 
+# using .Mesher2D_Dualmesh
 
 end 

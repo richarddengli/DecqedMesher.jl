@@ -48,6 +48,8 @@ end
     @test all_entities_struct.curve_entities_dict[5].physicaltags == [5]
     @test all_entities_struct.curve_entities_dict[5].boundingpoints == [5, 6]
 
+    # println(primalmesh.tetdict[114])
+
 end
 
 @testset "mesher3D_dualmesh.jl" begin
@@ -121,6 +123,29 @@ end
     @test all_entities_struct.curve_entities_dict[2].physicaltags == [1]
     @test all_entities_struct.curve_entities_dict[2].boundingpoints == [2, 4]
 
-    println(primalmesh_2D.edgedict)
+    # println(primalmesh_2D.edgedict)
+
+end 
+
+@testset "mesher2D_dualmesh.jl" begin
+
+    primalmesh_2D, physicalnames_dict, all_entities_struct = DecqedMesher.Mesher2D_Primalmesh.complete_primalmesh_2D(testfile_2D)  
+
+    # interior face
+    testface_2D_interior = primalmesh_2D.facedict_2D[33]
+    @test DecqedMesher.Mesher2D_Dualmesh.get_circumcenter_face_2D(testface_2D_interior, primalmesh_2D.nodedict) == [0.5684523809523139, 0.6398809523809739, 0.0]
+
+
+    # boundary face
+    testface_2D_boundary = primalmesh_2D.facedict_2D[25]
+    @test DecqedMesher.Mesher2D_Dualmesh.get_circumcenter_face_2D(testface_2D_boundary, primalmesh_2D.nodedict) == [0.6250000000012046, 0.8898809523797038, 0.0]
+
+    # interior_dualnodedict
+    interior_dualnodedict = DecqedMesher.Mesher2D_Dualmesh.create_interior_dualnodedict_2D(primalmesh_2D.nodedict, primalmesh_2D.facedict_2D)
+    @test length(interior_dualnodedict) ==  length(primalmesh_2D.facedict_2D)
+
+    # boundary_dualnodedict
+    boundary_dualnodedict = DecqedMesher.Mesher2D_Dualmesh.create_boundary_dualnodedict(primalmesh_2D.nodedict, primalmesh_2D.edgedict, primalmesh_2D.facedict_2D)
+    @test length(boundary_dualnodedict) == 16 # by inspection, each side of the mesh has 4 boundary edges
 
 end 

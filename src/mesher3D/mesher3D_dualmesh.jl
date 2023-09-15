@@ -1,6 +1,5 @@
 # This file implements the functionality to create the complete 3D dual mesh.
 module Mesher3D_Dualmesh
-export complete_dualmesh
 
 using ..Mesher3D_Types
 using ..Mesher3D_Parse
@@ -73,7 +72,7 @@ end
     get_tetsforface(face::Facestruct, 
                     tetdict::Dict{Int, Tetstruct})
 
-Return the tetids that belong to face.
+Return the tetids that face belongs to.
 - Length 1 vector if face is on boundary
 - length 2 if face is in interior (asc order of nodeid)
 """
@@ -102,7 +101,7 @@ end
 
 """
     get_circumcenter_face(face::Facestruct, 
-                               nodedict::Dict{Int, Nodestruct})
+                          nodedict::Dict{Int, Nodestruct})
 
 Return the circumcenter of face.
 """
@@ -132,8 +131,8 @@ end
 
 """
     create_boundary_dualnodedict(nodedict::Dict{Int, Nodestruct},
-                                      facedict::Dict{SVector{3, Int}, Facestruct},
-                                      tetdict::Dict{Int, Tetstruct})
+                                 facedict::Dict{SVector{3, Int}, Facestruct},
+                                 tetdict::Dict{Int, Tetstruct})
 
 Create the boundary_dualnodedict, given facedict.
 A face is on the boundary iff it belongs to only 1 tet.
@@ -174,7 +173,7 @@ end
 
 """
     get_boundaryfaces_foredge(edge::Edgestruct, 
-                                   boundary_dualnodedict::Dict{SVector{3, Int}, Boundary_dualnodestruct})
+                              boundary_dualnodedict::Dict{SVector{3, Int}, Boundary_dualnodestruct})
 
 Get the boundary faces that contain edge.
 boundary_dualnodedict from previous function contains the dict of all possible boundary faces ids.
@@ -206,8 +205,8 @@ end
 
 
 """
-    gget_midpoint_edge(edge::Edgestruct, 
-                           nodedict::Dict{Int, Nodestruct})
+    get_midpoint_edge(edge::Edgestruct, 
+                       nodedict::Dict{Int, Nodestruct})
 
 Return the midpoint of edge.
 """
