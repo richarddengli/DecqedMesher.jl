@@ -1,17 +1,15 @@
 module  Mesher2D_Primalmesh
 
+using ..Mesher3D_Primalmesh: getedgelen
+# not included: getfacearea, gettetvol, complete_update_tet, edge2entities_map, complete_primalmesh
+
 using ..Mesher2D_Types
 using ..Mesher2D_Parse
+
 
 using StaticArrays
 using LinearAlgebra
 using Combinatorics
-
-# later only import specific functionality
-using ..Mesher3D_Primalmesh
-
-
-# getedgelen(nodedict::Dict{Int, Nodestruct},  edge::Edgestruct) imported directly from 3D
 
 
 """
@@ -34,9 +32,6 @@ function getfacearea_2D(nodedict::Dict{Int, Nodestruct}, face_2D::Facestruct_2D)
     return area
 
 end
-
-
-# gettetvol(nodedict::Dict{Int, Nodestruct}, face::Tetstruct) not needed
 
 
 """
@@ -162,6 +157,5 @@ function complete_primalmesh_2D(file::String)
     return primalmesh, physicalnames_dict, all_entities_struct
 
 end
-
 
 end

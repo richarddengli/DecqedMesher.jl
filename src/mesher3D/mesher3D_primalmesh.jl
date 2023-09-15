@@ -1,14 +1,9 @@
-# This file implements the functionality to create the complete primal mesh.
-
+# This file implements the functionality to create the complete 3D primal mesh.
 module Mesher3D_Primalmesh
 export getedgelen, getfacearea, gettetvol, complete_update_tet, edge2entities_map, complete_primalmesh
 
 using ..Mesher3D_Types
 using ..Mesher3D_Parse
-
-#import FromFile: @from
-# @from "mesher3D_types.jl" using Mesher3D_Types
-# @from "mesher3D_parse.jl" using Mesher3D_Parse: parsefile
 
 using StaticArrays
 using LinearAlgebra

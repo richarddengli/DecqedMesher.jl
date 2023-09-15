@@ -1,9 +1,6 @@
-# This file implements the functionality to create the complete dual mesh.
+# This file implements the functionality to create the complete 3D dual mesh.
 module Mesher3D_Dualmesh
 export complete_dualmesh
-
-# import FromFile: @from
-# @from "Mesher3D_primalmesh.jl" using Mesher3D_Primalmesh: complete_primalmesh
 
 using ..Mesher3D_Types
 using ..Mesher3D_Parse
@@ -182,7 +179,7 @@ end
 Get the boundary faces that contain edge.
 boundary_dualnodedict from previous function contains the dict of all possible boundary faces ids.
 
-If length(get_boundaryfaces_foredge()) >= 1, then the edge belongs on the boundary.
+If length(get_boundaryfaces_foredge()) >= 1 (i.e. 1 or 2), then the edge belongs on the boundary.
 """
 function get_boundaryfaces_foredge(edge::Edgestruct, 
                                    boundary_dualnodedict::Dict{SVector{3, Int}, Boundary_dualnodestruct})::Vector{SVector{3, Int}}
@@ -548,7 +545,6 @@ function get_nexttet(current_tetid::Int,
 
     # the next tet is the one with min id,
     # and want to exclude last_tetid from consideration
-
     next_tet_vec = setdiff(adjacent_tetids, last_tetid)
     if length(next_tet_vec) != 0
         return next_tet_vec[1]
@@ -945,7 +941,7 @@ end
 """
     get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)::Float64
 
-Compute the raw support volumes of primal edges
+Compute the raw support volumes of primal edges.
 """
 function get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)::Float64
 
@@ -954,9 +950,9 @@ function get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct
 
     edge_id = edge.id
     if edge_id in interioredge_key
-        supportvolume_raw = dualfacedicts.interior_dualfacedict[edge_id].raw_area*edge.length
+        supportvolume_raw = dualfacedicts.interior_dualfacedict[edge_id].raw_area*edge.length*1/3
     elseif edge_id in boundaryedge_key
-        supportvolume_raw = dualfacedicts.boundary_dualfacedict[edge_id].raw_area*edge.length
+        supportvolume_raw = dualfacedicts.boundary_dualfacedict[edge_id].raw_area*edge.length*1/3
     end
 
     return supportvolume_raw

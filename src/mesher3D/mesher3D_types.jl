@@ -1,4 +1,4 @@
-# This file defines the custom data types used throuhgout the program to represent objects in the 3D primal and dual mesh.
+# This file defines the custom data structures used throughout the package to represent objects in the 3D primal and dual mesh.
 module Mesher3D_Types
 export Physicalname_struct, Point_entity_struct, Curve_entity_struct, Surface_entity_struct, Volume_entity_struct, All_entities_struct
 export Nodestruct, Edgestruct, Facestruct, Tetstruct, Primalmeshstruct
@@ -59,12 +59,8 @@ mutable struct All_entities_struct
     volume_entities_dict::Dict{Int, Volume_entity_struct}
     All_entities_struct() = new()
 end
-
 ########################################### End material information ###########################################
-
 ########################################### Start primal mesh ###########################################
-
-
 # declare struct to contain node information
 mutable struct Nodestruct
     id::Int 
@@ -121,12 +117,8 @@ mutable struct Primalmeshstruct
     tetdict::Dict{Int, Tetstruct}
     Primalmeshstruct() = new()
 end
-
-
 ########################################### End primal mesh ###########################################
 ########################################### Start dual mesh ###########################################
-
-
 # declare struct to contain interior dual node information
 # an interior dual node corresponds to the circumcenter of a primal tet
 mutable struct Interior_dualnodestruct
@@ -312,5 +304,4 @@ mutable struct Dualmeshstruct
     Dualmeshstruct() = new()
 end
 ########################################### End dual mesh ###########################################
-    
 end

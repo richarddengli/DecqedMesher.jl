@@ -2,19 +2,16 @@ module Mesher2D_Types
 # the suffix "_2D" will be used to emphasize many declarations that are in direct correspondence with or analogous to, but not indentical to, their 3D counterparts
 # comments above the type declarations describe how they are different 
 
-import FromFile: @from
-
 export Physicalname_struct, Point_entity_struct, Curve_entity_struct, Surface_entity_struct, All_entities_struct_2D
 export Nodestruct, Edgestruct, Facestruct_2D, Primalmeshstruct_2D
 export Interior_dualnodestruct_2D, Boundary_dualnodestruct_2D, Interior_dualedgestruct_2D, Boundary_dualedgestruct_2D, Auxiliary_onprimaledge_dualedgestruct_2D, Dualfacestruct_2D, Dualnodedicts_struct_2D, Dualedgedicts_struct_2D, Dualmeshstruct_2D
 
 # Using static arrays may improve performance for certain purposes
 using StaticArrays
+
+
 ########################################### Start material information ###########################################
-
-
-# @from "../mesher3D/mesher3D_types.jl" import Mesher3D_Types: Physicalname_struct, Point_entity_struct, Curve_entity_struct, Surface_entity_struct 
-@from "../mesher3D/mesher3D_types.jl" using Mesher3D_Types: Physicalname_struct, Point_entity_struct, Curve_entity_struct, Surface_entity_struct
+using ..Mesher3D_Types: Physicalname_struct, Point_entity_struct, Curve_entity_struct, Surface_entity_struct
 # not included: Volume_entity_struct, All_entities_struct
 
 # declare struct to contain all entities
@@ -25,18 +22,13 @@ mutable struct All_entities_struct_2D
     surface_entities_dict::Dict{Int, Surface_entity_struct}
     All_entities_struct_2D() = new()
 end
-
-
 ########################################### End material information ###########################################
 ########################################### Start primal mesh ###########################################
-
-
-@from "../mesher3D/mesher3D_types.jl" using Mesher3D_Types: Nodestruct, Edgestruct
+using ..Mesher3D_Types: Nodestruct, Edgestruct
 # not included: Facestruct, Tetstruct, Primalmeshstruct
 
 # note, Edgestruct supportvolume is really a support area in 2D 
 # but we avoid declaration of a new struct given that the significance of the quantity is clear from context
-
 
 # declare struct to contain face information
 # note, we follow the convention of the 3D counterpart and use an Int to label the highest dimensional primal object (which is precisely a face in 2D)
@@ -60,8 +52,6 @@ mutable struct Primalmeshstruct_2D
     facedict_2D::Dict{Int, Facestruct_2D}
     Primalmeshstruct_2D() = new()
 end
-
-
 ########################################### End primal mesh ###########################################
 ########################################### Start dual mesh ###########################################
 # no imports are made from mesher3D_types
@@ -175,16 +165,5 @@ mutable struct Dualmeshstruct_2D
     dualfacedict_2D::Dict{Int, Dualfacestruct_2D}
     Dualmeshstruct_2D() = new()
 end
-
-
-end
 ########################################### End dual mesh ###########################################
-
-# test = Physicalname_struct()
-# test.physicaltag = 1
-# test.dimension = 2
-# test.name = "test"
-# 
-# test
-# 
-# test = Point_entity_struct()
+end

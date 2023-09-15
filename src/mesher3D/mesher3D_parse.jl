@@ -1,14 +1,6 @@
-# This file is used to implement the functionality to parse the .msh file for a 3D mesh.
-# Note that information about the material imhomogeneities are parsed
-# by the parsephysicalnames and parse_entities functions, but they are 
-# not currently used in `primalmesh.jl` or `dualmesh.jl``.
-
-
+# This file implements the functionality to parse the .msh file for a 3D mesh.
 module Mesher3D_Parse 
-export getfilepath, parsephysicalnames, parse_entities_2, parsenodes_2, parsetets, parsefile
-
-# import FromFile: @from
-# @from "mesher3D_types.jl" using Mesher3D_Types
+export getfilepath, parsephysicalnames, parse_entities, parsenodes, parsetets, parsefile
 
 using ..Mesher3D_Types
 using StaticArrays
@@ -73,7 +65,7 @@ end
 Return an dict of entities corresponding to the relevant
 information of the "\$Entities" section in fileinstance.
 """
-function parse_entities_2(fileinstance::IOStream)::All_entities_struct
+function parse_entities(fileinstance::IOStream)::All_entities_struct
 
     # instantiate empty struct to populate
     all_entities_struct = All_entities_struct()
@@ -207,13 +199,13 @@ end
 
 
 """
-    parsenodes_2(fileinstance::IOStream, all_entities_struct::All_entities_struct)::Dict{Int64, Nodestruct}
+    parsenodes(fileinstance::IOStream, all_entities_struct::All_entities_struct)::Dict{Int64, Nodestruct}
 
 Return a dict of Nodestruct corresponding to the "\$Nodes" section in fileinstance.
 
 Reads fileinstance line by line.
 """
-function parsenodes_2(fileinstance::IOStream, all_entities_struct::All_entities_struct)::Dict{Int64, Nodestruct}
+function parsenodes(fileinstance::IOStream, all_entities_struct::All_entities_struct)::Dict{Int64, Nodestruct}
 
     # instantiate empty dict to populate with structs
     nodedict = Dict{Int, Nodestruct}()
@@ -424,9 +416,9 @@ function parsefile(file::String)::Vector{Any}
             if startswith(currentline, "\$PhysicalNames")
                 physicalnames_dict = parsephysicalnames(fileinstance)
             elseif startswith(currentline, "\$Entities")
-                all_entities_struct = parse_entities_2(fileinstance)
+                all_entities_struct = parse_entities(fileinstance)
             elseif startswith(currentline, "\$Nodes")
-                nodedict = parsenodes_2(fileinstance, all_entities_struct)
+                nodedict = parsenodes(fileinstance, all_entities_struct)
             elseif startswith(currentline, "\$Elements")
                 tetdict = parsetets(fileinstance)
             end

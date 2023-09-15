@@ -1,6 +1,7 @@
 using DecqedMesher
 using Test
 
+#########################################################################################
 # the test 3D mesh file is "3D_testmesh.msh"
 # note the below line will only work when `pkg test`` (or equivalent) is run due to the additional "/test" appended to the front of the file path when testing in this manner
 testfile_3D = "/meshes/3D_testmesh.msh"
@@ -71,5 +72,18 @@ end
         boundary_dualedgedict = dualmesh.dualedgedicts.boundary_dualedgedict
         @test boundary_dualedgedict[[1, 17, 32]].dualnodes == [193, [1, 17, 32]]
         @test boundary_dualedgedict[[6, 14, 43]].dualnodes == [199, [6, 14, 43]]
+
+end 
+#########################################################################################
+# the test 2D mesh file is "2D_testmesh.msh"
+# note the below line will only work when `pkg test`` (or equivalent) is run due to the additional "/test" appended to the front of the file path when testing in this manner
+testfile_2D = "/meshes/2D_testmesh.msh"
+
+@testset "mesher2D_parse.jl" begin
+
+    nodedict, facedict_2D, physicalnames_dict, all_entities_struct_2D = DecqedMesher.Mesher2D_Parse.parsefile_2D(testfile_2D)
+
+    # checking high-level info
+    print(physicalnames_dict)
 
 end 

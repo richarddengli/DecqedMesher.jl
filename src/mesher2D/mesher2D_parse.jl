@@ -1,15 +1,14 @@
 module Mesher2D_Parse
 export parsefile_2D
 
-import FromFile: @from
-
-# @from "../mesher3D/mesher3D_parse.jl" using Mesher3D_Parse: getfilepath, parsephysicalnames # (LOOK into why this is not working?)
+using ..Mesher3D_Parse: getfilepath, parsephysicalnames
 # not included: parse_entities_2(), parsenodes_2(), parsetets(), parsefile()
-using ..Mesher3D_Parse
-using ..mesher2D_Types
-# @from "mesher2D_types.jl" using mesher2D_Types
+
+using ..Mesher2D_Types
 
 using StaticArrays
+
+
 """
     parse_entities_2_2D(fileinstance::IOStream)::All_entities_struct_2D
 
@@ -326,11 +325,3 @@ function parsefile_2D(file::String)::Vector{Any}
 end
 
 end
-
-# 
-# test
-@from "mesher2D_parse.jl" using Mesher2D_Parse
-# parsefile_2D("../meshes/triangles_test.msh")
-Mesher2D_Parse.parsefile_2D("/meshes/triangles_test.msh")
-
-#test

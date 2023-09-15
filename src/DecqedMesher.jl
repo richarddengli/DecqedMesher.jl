@@ -17,9 +17,14 @@ export complete_dualmesh
 # ---
 # all other unexported functions must be accessed using qualified calls, e.g:
 # ---
-# using DecqedMesher
+# using DecqedMesher (if package has not been imported yet)
 # DecqedMesher.Mesher3D_Primalmesh.complete_primalmesh()
 # ---
+
+include("./mesher2D/mesher2D_types.jl")
+include("./mesher2D/mesher2D_parse.jl")
+include("./mesher2D/mesher2D_primalmesh.jl")
+include("./mesher2D/mesher2D_dualmesh.jl")
 
 
 end 
