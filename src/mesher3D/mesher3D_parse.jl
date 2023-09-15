@@ -44,7 +44,7 @@ function parsephysicalnames(fileinstance::IOStream)::Dict{Int, Physicalname_stru
 
         dimension = parse(Int, physicalname_data[1])
         physicaltag = parse(Int, physicalname_data[2])
-        name = join(physicalname_data[3:end], " ")
+        name = strip(join(physicalname_data[3:end], " "), '\"') # remove the \" appearing at the start and end of the string
 
         physicalname_struct = Physicalname_struct()
         physicalname_struct.physicaltag = physicaltag

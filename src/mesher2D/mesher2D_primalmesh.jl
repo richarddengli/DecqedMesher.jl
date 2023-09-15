@@ -36,9 +36,8 @@ end
 
 """
     complete_update_face(nodedict::Dict{Int, Nodestruct}, 
-                         edgedict::Dict{SVector{2, Int}, Edgestruct}, 
-                         facedict::Dict{SVector{3, Int}, Facestruct}, 
-                         face_2D::Facestruct_2D)
+                              edgedict::Dict{SVector{2, Int}, Edgestruct}, 
+                              face_2D:: Facestruct_2D)
 
 Updates the missing fields of face (its edges and area) and updates the associated structs
 in the appropriate primal mesh dictionaries. This is the analogue of
@@ -134,11 +133,11 @@ obect is facedict_2D rather than tetdict.
 function complete_primalmesh_2D(file::String)
     
     # reads in the raw info from Gmsh
-    nodedict, facedict_2D, physicalnames_dict, all_entities_struct = parsefile(file)
+    nodedict, facedict_2D, physicalnames_dict, all_entities_struct = parsefile_2D(file)
 
     # instantiate empty dicts to store mesh dicts
     edgedict = Dict{SVector{2, Int}, Edgestruct}()
-    facedict_2D = Dict{SVector{3, Int}, Facestruct}()
+    facedict_2D = Dict{SVector{3, Int}, Facestruct_2D}()
     
     # complete information for each face
     for face_2D_pair in facedict_2D
@@ -149,12 +148,12 @@ function complete_primalmesh_2D(file::String)
     edge2entities_map_2D(nodedict, edgedict)
 
     # create completed primal mesh
-    primalmesh = Primalmeshstruct_2D()
-    primalmesh.nodedict = nodedict
-    primalmesh.edgedict = edgedict
-    primalmesh.facedict = facedict_2D
+    primalmesh_2D = Primalmeshstruct_2D()
+    primalmesh_2D.nodedict = nodedict
+    primalmesh_2D.edgedict = edgedict
+    primalmesh_2D.facedict_2D = facedict_2D
 
-    return primalmesh, physicalnames_dict, all_entities_struct
+    return primalmesh_2D, physicalnames_dict, all_entities_struct
 
 end
 
