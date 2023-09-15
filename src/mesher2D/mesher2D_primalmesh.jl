@@ -45,8 +45,8 @@ complete_update_tet in 3D.
 """
 function complete_update_face(nodedict::Dict{Int, Nodestruct}, 
                               edgedict::Dict{SVector{2, Int}, Edgestruct}, 
+                              facedict_2D:: Dict{Int, Facestruct_2D},
                               face_2D:: Facestruct_2D)
-                              # note facedict_2D not needed, just like how complete_update_tet does not need tetdict
 
     # get nodeids of face
     nodeids = face_2D.nodes
@@ -71,6 +71,7 @@ function complete_update_face(nodedict::Dict{Int, Nodestruct},
     # update info for each face, then append to facedict_2D 
     face_2D.edges = edgeid_face_vec
     face_2D.area = getfacearea_2D(nodedict, face_2D)
+    facedict_2D[face_2D.id] = face_2D
 
 end
 
@@ -117,6 +118,8 @@ function edge2entities_map_2D(nodedict::Dict{Int, Nodestruct}, edgedict::Dict{SV
         else
             entities_dict[2] = [0]
         end
+
+        edgedict[ekey].entities_dict = entities_dict
     
     end
 
@@ -137,11 +140,10 @@ function complete_primalmesh_2D(file::String)
 
     # instantiate empty dicts to store mesh dicts
     edgedict = Dict{SVector{2, Int}, Edgestruct}()
-    facedict_2D = Dict{SVector{3, Int}, Facestruct_2D}()
     
     # complete information for each face
     for face_2D_pair in facedict_2D
-        complete_update_face(nodedict, edgedict, face_2D_pair.second)
+        complete_update_face(nodedict, edgedict, facedict_2D, face_2D_pair.second)
     end
 
     # complete entity info for each edge

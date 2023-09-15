@@ -35,6 +35,10 @@ end
     # the following entity info is correct: curve tags: 1, 4, 9; surface tags: 1, 3, 5; volume tags: 1
     @test testnode.entities_dict == Dict{Int64, Vector}(1 => Any[1, 4, 9], 2 => Any[1, 3, 5], 3 => Any[1])
 
+    # checking primal edge whose id is [24, 45], note support volume is 0 until calculated in "mesher3D_dualmesh.jl"
+    testedge = primalmesh.edgedict[[24, 45]]
+    @test testedge.id == [24, 45]
+
     # checking physicalnames_dict
     # there should be no physical entities assigned any physical names, so the dict of physical names is empty
     @test physicalnames_dict == Dict{Int64, DecqedMesher.Mesher3D_Types.Physicalname_struct}()
@@ -116,5 +120,7 @@ end
     @test all_entities_struct.curve_entities_dict[2].curve_tag == 2
     @test all_entities_struct.curve_entities_dict[2].physicaltags == [1]
     @test all_entities_struct.curve_entities_dict[2].boundingpoints == [2, 4]
+
+    println(primalmesh_2D.edgedict)
 
 end 
