@@ -177,6 +177,18 @@ end
     @test length(dualedgedicts_2D.boundary_dualedgedict_2D) == length(boundary_dualedgedict_2D)
     @test length(dualedgedicts_2D.auxiliary_onprimaledge_dualedgedict_2D) == length(auxiliary_onprimaledge_dualedgedict_2D)
 
+    # get_dualarea_rawvalue_2D()
+    # check raw area of all dual faces add up to the mesh area (1*1=1)
+    raw_area_sum = 0
+    for nodepair in primalmesh_2D.nodedict
+        area = DecqedMesher.Mesher2D_Dualmesh.get_dualarea_rawvalue_2D(nodepair.second, primalmesh_2D.nodedict, primalmesh_2D.edgedict, primalmesh_2D.facedict_2D)
+        raw_area_sum += area
+    end 
+    @test isapprox(raw_area_sum, 1, rtol=0.00000001)  
+
+
+
+
     # visual checks
     using Plots
 

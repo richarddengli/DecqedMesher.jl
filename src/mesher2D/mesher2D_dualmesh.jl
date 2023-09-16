@@ -14,7 +14,7 @@ using ..Mesher3D_Dualmesh: get_midpoint_edge, get_area_triangle
 # create_boundary_dualedgedict | create_boundary_dualedgedict_2D
 # create_auxiliary_onprimaledge_dualedgedict, create_auxiliary_onprimalface_dualedgedict | create_auxiliary_onprimaledge_dualedgedict_2D
 # create_dualedgedicts | create_dualedgedicts_2D
-# get_dualarea_rawvalue | get_dualarea_rawvalue_2D
+# get_dualarea_rawvalue, get_dualvolume_rawvalue | get_dualarea_rawvalue_2D
 
 using ..Mesher2D_Types
 using ..Mesher2D_Parse
@@ -321,7 +321,99 @@ end
 ############################ END DUAL EDGES ############################
 
 ############################ START DUAL FACES ############################
+"""
+    get_dualarea_rawvalue_2D(node::Nodestruct,
+                             nodedict::Dict{Int, Nodestruct},
+                             edgedict::Dict{SVector{2, Int}, Edgestruct},
+                             facedict_2D::Dict{Int, Facestruct_2D})
 
+Determine the raw value of the dual area corresponding to a primal node using Hirani's method.
+"""
+function get_dualarea_rawvalue_2D(node::Nodestruct,
+                                  nodedict::Dict{Int, Nodestruct},
+                                  edgedict::Dict{SVector{2, Int}, Edgestruct},
+                                  facedict_2D::Dict{Int, Facestruct_2D})::Float64
+
+    dualarea_value = 0
+
+    nodeid = node.id
+
+    # get list of edges containing node
+    edgelist = []
+    for edgepair in edgedict
+        edgeid = edgepair.first
+        if nodeid in edgeid
+            push!(edgelist, edgeid)
+        end
+    end
+
+    # for each edge in above list, 
+    # get the list of faces containing that edge
+    for edgeid in edgelist
+
+        edge = edgedict[edgeid]
+
+        faceids_list_2D = []
+        for facepair_2D in facedict_2D
+            facenodes = facepair_2D.second.nodes
+            if issubset(edgeid, facenodes)
+                push!(faceids_list_2D, facepair_2D.first)
+            end
+        end
+
+
+        for faceid_2D in faceids_list_2D
+
+            face_2D = facedict_2D[faceid_2D]
+
+            # calculate multiplier
+
+            # calculate lambda1 (omitted, since it is always 1)
+            mp = get_midpoint_edge(edge, nodedict) # mp is used later
+
+            lambda1 = 1
+
+            # calculate lambda2 
+            vp2 = setdiff(face_2D.nodes,  edgeid)[1]
+
+            vp2_coords = nodedict[vp2].coords
+
+            vector1 = vp2_coords - nodedict[edgeid[1]].coords
+            vector2 = vp2_coords - nodedict[edgeid[2]].coords
+            face_normal = cross(vector1, vector2)
+            vector3 = nodedict[edgeid[2]].coords - nodedict[edgeid[1]].coords
+            halfspace_plane_normal = cross(face_normal, vector3)
+
+            a = halfspace_plane_normal[1]
+            b = halfspace_plane_normal[2]
+            c = halfspace_plane_normal[3]
+            x0 = nodedict[edgeid[1]].coords[1]
+            y0 = nodedict[edgeid[1]].coords[2]
+            z0 = nodedict[edgeid[1]].coords[3]
+            face_circumcenter = get_circumcenter_face_2D(face_2D, nodedict)
+
+            sign_vp2 = sign(a*(vp2_coords[1] - x0) + b*(vp2_coords[2] - y0) + c*(vp2_coords[3] - z0))
+            sign_face_circumcenter = sign(a*(face_circumcenter[1] - x0) + b*(face_circumcenter[2] - y0) + c*(face_circumcenter[3] - z0))
+
+            lambda2 = -1
+            if sign_vp2 == sign_face_circumcenter
+                lambda2 = 1
+            end
+
+            # calculate overall multiplier
+            multiplier = lambda1 * lambda2
+
+            # add to dual volume
+            triangle_area = get_area_triangle(node.coords, mp, face_circumcenter)
+            dualarea_value += multiplier * triangle_area
+
+        end
+
+    end
+
+    return dualarea_value
+
+end
 
 ############################ END DUAL FACES ############################
 

@@ -734,7 +734,7 @@ end
                                facedict::Dict{SVector{3, Int}, Facestruct}, 
                                tetdict::Dict{Int, Tetstruct})
 
-Determine the raw value of the dual area using Hirani's method.
+Determine the raw value of the dual area corresponding to a primal edge using Hirani's method.
 """
 function get_dualarea_rawvalue(edge::Edgestruct,
                                nodedict::Dict{Int, Nodestruct},
@@ -1399,7 +1399,7 @@ function get_dualvolume_rawvalue(node::Nodestruct,
                 # calculate multiplier
 
                 # calculate lambda1 (omitted, since it is always 1)
-                mp = get_midpoint_edge(edge, nodedict)
+                mp = get_midpoint_edge(edge, nodedict) # mp is used later
 
                 lambda1 = 1
 
