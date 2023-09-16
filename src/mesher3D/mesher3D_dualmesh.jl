@@ -293,8 +293,9 @@ end
 ########################################### START DUAL EDGES ###########################################
 """
     create_interior_dualedgedict(facedict::Dict{SVector{3, Int}, Facestruct},
-                                 tetdict::Dict{Int, Tetstruct}, 
-                                 boundary_dualnodedict::Dict{SVector{3, Int}, Boundary_dualnodestruct})
+                                tetdict::Dict{Int, Tetstruct}, 
+                                interior_dualnodedict::Dict{Int, Interior_dualnodestruct}, 
+                                boundary_dualnodedict::Dict{SVector{3, Int}, Boundary_dualnodestruct})
 
 Create dictionary of interior dual edges.
 
@@ -310,6 +311,7 @@ function create_interior_dualedgedict(facedict::Dict{SVector{3, Int}, Facestruct
     # get list of interior primal faces 
     interior_primalfaceids = setdiff(keys(facedict), keys(boundary_dualnodedict))
     
+    # # make each interior dual edge
     for interior_primalfaceid in interior_primalfaceids
 
         interior_dualedge = Interior_dualedgestruct()
@@ -343,6 +345,7 @@ function create_boundary_dualedgedict(interior_dualnodedict::Dict{Int, Interior_
 
     boundary_dualedgedict = Dict{SVector{3, Int}, Boundary_dualedgestruct}()                                  
 
+    # make each boundary dual edge
     for boundary_dualnodepair in boundary_dualnodedict
 
         boundary_dualnodeid = boundary_dualnodepair.first

@@ -135,17 +135,97 @@ end
     testface_2D_interior = primalmesh_2D.facedict_2D[33]
     @test DecqedMesher.Mesher2D_Dualmesh.get_circumcenter_face_2D(testface_2D_interior, primalmesh_2D.nodedict) == [0.5684523809523139, 0.6398809523809739, 0.0]
 
-
     # boundary face
     testface_2D_boundary = primalmesh_2D.facedict_2D[25]
     @test DecqedMesher.Mesher2D_Dualmesh.get_circumcenter_face_2D(testface_2D_boundary, primalmesh_2D.nodedict) == [0.6250000000012046, 0.8898809523797038, 0.0]
 
-    # interior_dualnodedict
-    interior_dualnodedict = DecqedMesher.Mesher2D_Dualmesh.create_interior_dualnodedict_2D(primalmesh_2D.nodedict, primalmesh_2D.facedict_2D)
-    @test length(interior_dualnodedict) ==  length(primalmesh_2D.facedict_2D)
+    # interior dualnodes
+    interior_dualnodedict_2D = DecqedMesher.Mesher2D_Dualmesh.create_interior_dualnodedict_2D(primalmesh_2D.nodedict, primalmesh_2D.facedict_2D)
+    @test length(interior_dualnodedict_2D) ==  length(primalmesh_2D.facedict_2D)
 
-    # boundary_dualnodedict
-    boundary_dualnodedict = DecqedMesher.Mesher2D_Dualmesh.create_boundary_dualnodedict(primalmesh_2D.nodedict, primalmesh_2D.edgedict, primalmesh_2D.facedict_2D)
-    @test length(boundary_dualnodedict) == 16 # by inspection, each side of the mesh has 4 boundary edges
+    # boundary dualnodes
+    boundary_dualnodedict_2D = DecqedMesher.Mesher2D_Dualmesh.create_boundary_dualnodedict_2D(primalmesh_2D.nodedict, primalmesh_2D.edgedict, primalmesh_2D.facedict_2D)
+    @test length(boundary_dualnodedict_2D) == 16 # by inspection, each side of the mesh has 4 boundary edges
 
+    # all dualnodes
+    dualnodedicts_2D = DecqedMesher.Mesher2D_Dualmesh.create_dualnodedicts_2D(primalmesh_2D.nodedict, primalmesh_2D.edgedict, primalmesh_2D.facedict_2D)
+    @test length(dualnodedicts_2D.interior_dualnodedict_2D) == length(interior_dualnodedict_2D)
+    @test length(dualnodedicts_2D.boundary_dualnodedict_2D) == length(boundary_dualnodedict_2D)
+
+    # interior dual edges
+    interior_dualedgedict_2D = DecqedMesher.Mesher2D_Dualmesh.create_interior_dualedgedict_2D(primalmesh_2D.edgedict, primalmesh_2D.facedict_2D, interior_dualnodedict_2D, boundary_dualnodedict_2D)
+    @test length(interior_dualedgedict_2D) + length(boundary_dualnodedict_2D) == length(primalmesh_2D.edgedict)
+
+    # boundary dual edges
+    boundary_dualedgedict_2D = DecqedMesher.Mesher2D_Dualmesh.create_boundary_dualedgedict_2D(interior_dualnodedict_2D, boundary_dualnodedict_2D)
+    @test length(boundary_dualedgedict_2D) == 16
+
+    # visual checks
+    using Plots
+
+    # dual node plots
+    coords_list = []
+    for interior_dualnode_2D_pair in interior_dualnodedict_2D
+        coords = interior_dualnode_2D_pair.second.coords
+        push!(coords_list, coords)
+    end
+    x_coords = [point[1] for point in coords_list]
+    y_coords = [point[2] for point in coords_list]
+    scatter(x_coords, y_coords, legend=false)
+    savefig("interior dual nodes")
+
+    coords_list = []
+    for boundary_dualnode_2D_pair in boundary_dualnodedict_2D
+        coords = boundary_dualnode_2D_pair.second.coords
+        push!(coords_list, coords)
+    end
+    x_coords = [point[1] for point in coords_list]
+    y_coords = [point[2] for point in coords_list]
+    scatter(x_coords, y_coords, legend=false)
+    savefig("boundary dual nodes")
+
+    # interior dual edge plots with interior dual nodes
+    plot()
+
+    edge_list = []
+    coords_list = []
+    for interior_dualnode_2D_pair in interior_dualnodedict_2D
+        coords = interior_dualnode_2D_pair.second.coords
+        push!(coords_list, coords)
+    end
+    x_coords = [point[1] for point in coords_list]
+    y_coords = [point[2] for point in coords_list]
+    scatter(x_coords, y_coords, legend=false)
+
+
+    for interior_dualedge_2D_pair in interior_dualedgedict_2D
+        dualnode_ids = interior_dualedge_2D_pair.second.dualnodes
+        coord1 = interior_dualnodedict_2D[dualnode_ids[1]].coords
+        coord2 = interior_dualnodedict_2D[dualnode_ids[2]].coords
+        plot!([coord1[1], coord2[1]], [coord1[2], coord2[2]], legend=false, color="purple")
+    end 
+    savefig("interior dual edges")
+
+    # boundary dual edge plots with boundary dual nodes
+    plot()
+
+    edge_list = []
+    coords_list = []
+    for boundary_dualnode_2D_pair in boundary_dualnodedict_2D
+        coords = boundary_dualnode_2D_pair.second.coords
+        push!(coords_list, coords)
+    end
+    x_coords = [point[1] for point in coords_list]
+    y_coords = [point[2] for point in coords_list]
+    scatter(x_coords, y_coords, legend=false)
+
+
+    for boundary_dualedge_2D_pair in boundary_dualedgedict_2D
+        dualnode_ids = boundary_dualedge_2D_pair.second.dualnodes
+        coord1 = interior_dualnodedict_2D[dualnode_ids[1]].coords
+        coord2 = boundary_dualnodedict_2D[dualnode_ids[2]].coords
+        plot!([coord1[1], coord2[1]], [coord1[2], coord2[2]], legend=false, color="purple")
+    end 
+    savefig("boundary dual edges")
+    
 end 

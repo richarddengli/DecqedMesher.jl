@@ -10,8 +10,7 @@ A detailed presentation of DEC-QED, its applications for modeling electromagneti
 - [Spectral Theory for Non-linear Superconducting Microwave Systems: Extracting Relaxation Rates and Mode Hybridization](https://arxiv.org/abs/2309.03435)
 
 # Installation
-Dependencies: 
-StaticArrays, Combinatorics, LinearAlgebra, (Revise)
+
 
 # Usage
 
