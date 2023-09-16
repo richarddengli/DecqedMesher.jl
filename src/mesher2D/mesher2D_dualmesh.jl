@@ -1,8 +1,8 @@
 module  Mesher2D_Dualmesh
 
-using ..Mesher3D_Dualmesh: get_midpoint_edge
-# functionality that are not imported from mesher3D are listed in the following table, with a description of its mesher2D analogue (if applicable): 
-
+using ..Mesher3D_Dualmesh: get_midpoint_edge, get_area_triangle
+# functionality that are not imported from mesher3D but have a mesher2D analogue are listed in the following table: 
+# ____________________________________________
 # mesher3D implementation | mesher2D analogue
 # ____________________________________________
 # get_circumcenter_tet, get_circumcenter_face  | get_circumcenter_face_2D
@@ -14,6 +14,7 @@ using ..Mesher3D_Dualmesh: get_midpoint_edge
 # create_boundary_dualedgedict | create_boundary_dualedgedict_2D
 # create_auxiliary_onprimaledge_dualedgedict, create_auxiliary_onprimalface_dualedgedict | create_auxiliary_onprimaledge_dualedgedict_2D
 # create_dualedgedicts | create_dualedgedicts_2D
+# get_dualarea_rawvalue | get_dualarea_rawvalue_2D
 
 using ..Mesher2D_Types
 using ..Mesher2D_Parse
@@ -320,7 +321,6 @@ end
 ############################ END DUAL EDGES ############################
 
 ############################ START DUAL FACES ############################
-
 
 
 ############################ END DUAL FACES ############################

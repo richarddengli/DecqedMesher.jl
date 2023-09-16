@@ -79,6 +79,13 @@ end
     @test boundary_dualedgedict[[1, 17, 32]].dualnodes == [193, [1, 17, 32]]
     @test boundary_dualedgedict[[6, 14, 43]].dualnodes == [199, [6, 14, 43]]
 
+    # check raw volumes of all dual volumes add up to the mesh volume (1*1*1=1). This is quite remarkable, meaning the orientation of certain objects are accounted for in Hirani's method.
+    raw_volume_sum = 0
+    for dualvolumepair in dualmesh.dualvolumedict
+        raw_volume_sum += dualvolumepair.second.raw_volume
+    end 
+    @test isapprox(raw_volume_sum, 1, rtol=0.00000001)
+
 end 
 #########################################################################################
 # the test 2D mesh file is "2D_testmesh.msh"
