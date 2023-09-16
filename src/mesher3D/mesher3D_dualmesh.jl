@@ -370,7 +370,7 @@ end
 
 """
     create_auxiliary_onprimaledge_dualedgedict(nodedict::Dict{Int, Nodestruct},
-                                               auxiliary_dualnodedict)
+                                               auxiliary_dualnodedict::Dict{SVector{2, Int}, Auxiliary_dualnodestruct})
 
 Create dictionary of auxiliary dual edges lying on part of a boundary primal edge.
 
@@ -378,7 +378,7 @@ Each such dual edge corresponds to a tuple (boundary primal edge, primal node pa
 Boundary primal edge ids are already listed in auxiliary_dualnodedict.
 """
 function create_auxiliary_onprimaledge_dualedgedict(nodedict::Dict{Int, Nodestruct},
-                                                    auxiliary_dualnodedict)::Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct}
+                                                    auxiliary_dualnodedict::Dict{SVector{2, Int}, Auxiliary_dualnodestruct})::Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct}
 
     auxiliary_onprimaledge_dualedgedict = Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct}()           
     
@@ -461,7 +461,7 @@ function create_dualedgedicts(nodedict::Dict{Int, Nodestruct},
                               tetdict::Dict{Int, Tetstruct}, 
                               interior_dualnodedict::Dict{Int, Interior_dualnodestruct}, 
                               boundary_dualnodedict::Dict{SVector{3, Int}, Boundary_dualnodestruct},
-                              auxiliary_dualnodedict::Dict{SVector{2, Int}, Auxiliary_dualnodestruct})
+                              auxiliary_dualnodedict::Dict{SVector{2, Int}, Auxiliary_dualnodestruct})::Dualedgedicts_struct
     
     dualedgedicts = Dualedgedicts_struct()
     dualedgedicts.interior_dualedgedict = create_interior_dualedgedict(facedict, tetdict, interior_dualnodedict, boundary_dualnodedict)

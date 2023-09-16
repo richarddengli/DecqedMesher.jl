@@ -12,6 +12,8 @@ using ..Mesher3D_Dualmesh: get_midpoint_edge
 # create_dualnodedicts | create_dualnodedicts_2D
 # create_interior_dualedgedict | create_interior_dualedgedict_2D
 # create_boundary_dualedgedict | create_boundary_dualedgedict_2D
+# create_auxiliary_onprimaledge_dualedgedict, create_auxiliary_onprimalface_dualedgedict | create_auxiliary_onprimaledge_dualedgedict_2D
+# create_dualedgedicts | create_dualedgedicts_2D
 
 using ..Mesher2D_Types
 using ..Mesher2D_Parse
@@ -182,7 +184,7 @@ end
     create_interior_dualedgedict_2D(edgedict::Dict{SVector{2, Int}, Edgestruct},
                                     facedict_2D::Dict{Int, Facestruct_2D}, 
                                     interior_dualnodedict_2D::Dict{Int, Interior_dualnodestruct_2D},
-                                    boundary_dualnodedict_2D)::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D}
+                                    boundary_dualnodedict_2D::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D})::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D}
 
 Create dictionary of interior dual edges.
 
@@ -191,7 +193,7 @@ The list of interior primal edges is obtained by the set difference between edge
 function  create_interior_dualedgedict_2D(edgedict::Dict{SVector{2, Int}, Edgestruct},
                                           facedict_2D::Dict{Int, Facestruct_2D}, 
                                           interior_dualnodedict_2D::Dict{Int, Interior_dualnodestruct_2D},
-                                          boundary_dualnodedict_2D)::Dict{SVector{2, Int}, Interior_dualedgestruct_2D}
+                                          boundary_dualnodedict_2D::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D})::Dict{SVector{2, Int}, Interior_dualedgestruct_2D}
 
     interior_dualedgedict_2D = Dict{SVector{2, Int}, Interior_dualedgestruct_2D}()
 
@@ -252,7 +254,76 @@ function create_boundary_dualedgedict_2D(interior_dualnodedict_2D::Dict{Int, Int
     return boundary_dualedgedict_2D
 
 end
+
+
+"""
+    create_auxiliary_onprimaledge_dualedgedict_2D(nodedict::Dict{Int, Nodestruct},
+                                                  boundary_dualnodedict_2D::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D})
+
+Create dictionary of auxiliary dual edges lying on part of a boundary primal edge.
+
+Each such dual edge corresponds to a tuple (boundary primal edge, primal node part of that boundary primal edge).
+Boundary primal edge ids are already listed in boundary_dualnodedict_2D.
+"""
+function create_auxiliary_onprimaledge_dualedgedict_2D(nodedict::Dict{Int, Nodestruct},
+                                                       boundary_dualnodedict_2D::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D})::Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct_2D}
+
+    auxiliary_onprimaledge_dualedgedict_2D = Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct_2D}()           
+    
+    # make auxiliary_onprimaledge_dualedgedict, by looping over each tuple (boundary primal edge, primal node part of that boundary primal edge), 
+    # & insert into dict
+    for boundary_primaledgeid in keys(boundary_dualnodedict_2D)
+
+        for boundary_primalnodeid in boundary_primaledgeid
+
+            auxiliary_onprimaledge_dualedge_2D = Auxiliary_onprimaledge_dualedgestruct_2D()
+            auxiliary_onprimaledge_dualedge_2D.id = [boundary_primaledgeid, boundary_primalnodeid] 
+            
+            vec = boundary_dualnodedict_2D[auxiliary_onprimaledge_dualedge_2D.id[1]].coords - nodedict[auxiliary_onprimaledge_dualedge_2D.id[2]].coords
+            auxiliary_onprimaledge_dualedge_2D.length = norm(vec)
+
+            auxiliary_onprimaledge_dualedgedict_2D[auxiliary_onprimaledge_dualedge_2D.id] = auxiliary_onprimaledge_dualedge_2D
+
+        end
+
+    end
+
+    return auxiliary_onprimaledge_dualedgedict_2D
+
+end
+
+
+"""
+    create_dualedgedicts_2D(nodedict::Dict{Int, Nodestruct}, 
+                            edgedict::Dict{SVector{2, Int}, Edgestruct},
+                            facedict_2D::Dict{Int, Facestruct_2D}, 
+                            interior_dualnodedict_2D::Dict{Int, Interior_dualnodestruct_2D}, 
+                            boundary_dualnodedict_2D::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D})
+
+
+Create dualedgedicts.
+"""
+function create_dualedgedicts_2D(nodedict::Dict{Int, Nodestruct}, 
+                                 edgedict::Dict{SVector{2, Int}, Edgestruct},
+                                 facedict_2D::Dict{Int, Facestruct_2D}, 
+                                 interior_dualnodedict_2D::Dict{Int, Interior_dualnodestruct_2D}, 
+                                 boundary_dualnodedict_2D::Dict{SVector{2, Int}, Boundary_dualnodestruct_2D})::Dualedgedicts_struct_2D
+    
+    dualedgedicts_2D = Dualedgedicts_struct_2D()
+    dualedgedicts_2D.interior_dualedgedict_2D = create_interior_dualedgedict_2D(edgedict, facedict_2D, interior_dualnodedict_2D, boundary_dualnodedict_2D)
+    dualedgedicts_2D.boundary_dualedgedict_2D = create_boundary_dualedgedict_2D(interior_dualnodedict_2D, boundary_dualnodedict_2D)
+    dualedgedicts_2D.auxiliary_onprimaledge_dualedgedict_2D = create_auxiliary_onprimaledge_dualedgedict_2D(nodedict, boundary_dualnodedict_2D)
+
+    return dualedgedicts_2D
+
+end
 ############################ END DUAL EDGES ############################
+
+############################ START DUAL FACES ############################
+
+
+
+############################ END DUAL FACES ############################
 
 
 

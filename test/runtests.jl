@@ -152,13 +152,23 @@ end
     @test length(dualnodedicts_2D.interior_dualnodedict_2D) == length(interior_dualnodedict_2D)
     @test length(dualnodedicts_2D.boundary_dualnodedict_2D) == length(boundary_dualnodedict_2D)
 
-    # interior dual edges
+    # interior dualedges
     interior_dualedgedict_2D = DecqedMesher.Mesher2D_Dualmesh.create_interior_dualedgedict_2D(primalmesh_2D.edgedict, primalmesh_2D.facedict_2D, interior_dualnodedict_2D, boundary_dualnodedict_2D)
     @test length(interior_dualedgedict_2D) + length(boundary_dualnodedict_2D) == length(primalmesh_2D.edgedict)
 
-    # boundary dual edges
+    # boundary dualedges
     boundary_dualedgedict_2D = DecqedMesher.Mesher2D_Dualmesh.create_boundary_dualedgedict_2D(interior_dualnodedict_2D, boundary_dualnodedict_2D)
     @test length(boundary_dualedgedict_2D) == 16
+
+    # auxiliary (on primal edge) dualedges
+    auxiliary_onprimaledge_dualedgedict_2D = DecqedMesher.Mesher2D_Dualmesh.create_auxiliary_onprimaledge_dualedgedict_2D(primalmesh_2D.nodedict, boundary_dualnodedict_2D)
+    @test length(auxiliary_onprimaledge_dualedgedict_2D) == 16*2 # each boundary primal edge has 2 auxiliary dual edges
+
+    # all dualedges
+    dualedgedicts_2D = DecqedMesher.Mesher2D_Dualmesh.create_dualedgedicts_2D(primalmesh_2D.nodedict, primalmesh_2D.edgedict, primalmesh_2D.facedict_2D, interior_dualnodedict_2D, boundary_dualnodedict_2D)
+    @test length(dualedgedicts_2D.interior_dualedgedict_2D) == length(interior_dualedgedict_2D)
+    @test length(dualedgedicts_2D.boundary_dualedgedict_2D) == length(boundary_dualedgedict_2D)
+    @test length(dualedgedicts_2D.auxiliary_onprimaledge_dualedgedict_2D) == length(auxiliary_onprimaledge_dualedgedict_2D)
 
     # visual checks
     using Plots
@@ -187,7 +197,6 @@ end
     # interior dual edge plots with interior dual nodes
     plot()
 
-    edge_list = []
     coords_list = []
     for interior_dualnode_2D_pair in interior_dualnodedict_2D
         coords = interior_dualnode_2D_pair.second.coords
@@ -196,7 +205,6 @@ end
     x_coords = [point[1] for point in coords_list]
     y_coords = [point[2] for point in coords_list]
     scatter(x_coords, y_coords, legend=false)
-
 
     for interior_dualedge_2D_pair in interior_dualedgedict_2D
         dualnode_ids = interior_dualedge_2D_pair.second.dualnodes
@@ -209,7 +217,6 @@ end
     # boundary dual edge plots with boundary dual nodes
     plot()
 
-    edge_list = []
     coords_list = []
     for boundary_dualnode_2D_pair in boundary_dualnodedict_2D
         coords = boundary_dualnode_2D_pair.second.coords
@@ -219,7 +226,6 @@ end
     y_coords = [point[2] for point in coords_list]
     scatter(x_coords, y_coords, legend=false)
 
-
     for boundary_dualedge_2D_pair in boundary_dualedgedict_2D
         dualnode_ids = boundary_dualedge_2D_pair.second.dualnodes
         coord1 = interior_dualnodedict_2D[dualnode_ids[1]].coords
@@ -227,5 +233,34 @@ end
         plot!([coord1[1], coord2[1]], [coord1[2], coord2[2]], legend=false, color="purple")
     end 
     savefig("boundary dual edges")
+
+    # auxiliary (on primal edge) dual edges with boundary dual nodes and primal nodes
+    plot()
+
+    coords_list = []
+    for boundary_dualnode_2D_pair in boundary_dualnodedict_2D
+        coords = boundary_dualnode_2D_pair.second.coords
+        push!(coords_list, coords)
+    end
+    x_coords = [point[1] for point in coords_list]
+    y_coords = [point[2] for point in coords_list]
+    scatter(x_coords, y_coords, legend=false)
+
+    coords_list = []
+    for nodepair in primalmesh_2D.nodedict
+        coords = nodepair.second.coords
+        push!(coords_list, coords)
+    end
+    x_coords = [point[1] for point in coords_list]
+    y_coords = [point[2] for point in coords_list]
+    scatter!(x_coords, y_coords, legend=false)
+
+    for auxiliary_onprimaledge_dualedge_2D_pair in auxiliary_onprimaledge_dualedgedict_2D
+        dualnode_ids = auxiliary_onprimaledge_dualedge_2D_pair.second.id
+        coord1 = boundary_dualnodedict_2D[dualnode_ids[1]].coords
+        coord2 = primalmesh_2D.nodedict[dualnode_ids[2]].coords
+        plot!([coord1[1], coord2[1]], [coord1[2], coord2[2]], legend=false, color="purple")
+    end 
+    savefig("auxiliary (on primal edge) dual edges")
     
 end 
