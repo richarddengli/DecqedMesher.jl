@@ -1,8 +1,12 @@
 <h1 align="center"> DecqedMesher.jl </h1>
 
-<p align="center"> 
-[![Build Status](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/richarddengli/DecqedMesher/branch/main/graph/badge.svg)](https://codecov.io/gh/richarddengli/DecqedMesher)
+<p align="center">
+   <a href="https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml?query=branch%3Amain">
+     <img src="https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml/badge.svg?branch=main" alt="Build Status" style="vertical-align:top margin:6px 4px">
+   </a> 
+   <a href="https://codecov.io/gh/richarddengli/DecqedMesher">
+     <img src="https://codecov.io/gh/richarddengli/DecqedMesher/branch/main/graph/badge.svg" alt="Coverage" style="vertical-align:top margin:6px 4px">
+   </a> 
 </p>
 
 ``DecqedMesher.jl`` is a Julia package for constructing primal and dual mesh objects present in the discrete exterior calculus formulation of quantum electrodynamics (DEC-QED). Eventually, ``DecqedMesher.jl`` will be integrated fully into the larger [``computational toolbox for DEC-QED``](https://github.com/dnpham23/DEC-QED). Both ``DecqedMesher.jl`` and the ``computational toolbox for DEC-QED`` are under active development.
