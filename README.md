@@ -29,26 +29,43 @@ and also call:
 to activate the package and prepare the project environment.
 
 # Usage
-The 2 user-facing functions in `DecqedMesher.jl` are `complete_dualmesh()` and `complete_dualmesh_2D()`, which take in as input a `.msh` file representing 3D and 2D meshes, respectively. Both functions return a length 4 tuple, containing the following information corresponding to the `.msh` file:
+## Making the primal and dual mesh
+The 2 user-facing functions in `DecqedMesher.jl` are `complete_dualmesh()` and `complete_dualmesh_2D()`, which take in as input a `.msh` file representing 3D and 2D primal mesh, respectively, and return a length 4 tuple of structs containing the following information corresponding to the `.msh` file:
 1. dual mesh information
-2. primal mesh information
-3. physical group names
-4. elementary entities
+2. primal mesh information (parsed from  `.msh` and updated with certain information)
+3. physical group names (parsed unchanged from  `.msh`)
+4. elementary entities (parsed unchaged from  `.msh`)
 
 In a `.jl` file, import `DecqedMesher.jl`:
 ```julia
-.using DecqedMesher
+using DecqedMesher
 ```
 
-To construct the dual mesh of a 3D mesh, use `complete_dualmesh("[/path/to/mesh]")`. For example, for a mesh file named `3D_testmesh.msh` in the current directory, use:
+To construct the dual mesh of a 3D mesh, use `complete_dualmesh("[/path/to/mesh]")`. For example, for a mesh file named `3D_testmesh.msh` in the same directory as the `.jl` file, use:
 ```julia
-dualmesh, primalmesh, physicalnames_dict, all_entities_struct = complete_dualmesh("/3D_testmesh.msh")
+dualmesh_3D, primalmesh_3D, physicalnames_dict_3D, all_entities_struct_3D = complete_dualmesh("/3D_testmesh.msh")
 ```
 
-Similarly, to construct the dual mesh of a 2D mesh, use `complete_dualmesh_2D("[/path/to/mesh]")`. For example, for a mesh file named `2D_testmesh.msh` in the current directory, use:
+Similarly, to construct the dual mesh of a 2D mesh, use `complete_dualmesh_2D("[/path/to/mesh]")`. For example, for a mesh file named `2D_testmesh.msh`, use:
 ```julia
-dualmesh, primalmesh, physicalnames_dict, all_entities_struct = complete_dualmesh("/3D_testmesh.msh")
+dualmesh_2D, primalmesh_2D, physicalnames_dict_2D, all_entities_struct_2D = complete_dualmesh("/2D_testmesh.msh")
 ```
+
+All other functions are not intended to be user-facing, and thus must be executed via a qualified call; for example, `DecqedMesher.Mesher3D_Dualmesh.get_supportvolume`.
+
+## Accessing mesh information
+Successively access struct fields or index into dictionaries to retrieve the desired information. There are some examples:
+```julia
+# 3D mesh
+
+# For the 3D mesh, get the coordinates of the primal node whose id is 1
+primalmesh_3D.nodedict[1].coords
+
+# For the 2D mesh, get the boundary dual edges beloging to the dual face whose id is 5 (i.e. it is dual to the primal node whose id is 5)
+dualmesh_2D.dualfacedict_2D[5].boundary_dualedges
+```
+
+The exact sequence of calls for any desired information can be determined by inspecting the hierarchy of data types defined in `mesher3D_types.jl` and `mesher2D_types.jl`. Please note that there are slight differences in somes definitions between the two files. For instance, `mesher2D_types.jl` defines some fields with the additional suffix `_2D` compared to the 3D definitions, as shown by the above example.
 
 # Authors and Acknowledgements
 Richard Li, Dzung Pham, Nick Bronn, Thomas McConkey, Olivia Lanes, Hakan Türeci
