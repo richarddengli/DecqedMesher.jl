@@ -249,6 +249,7 @@ end
 mutable struct Dualvolumestruct
     id::Int # primal node id
 
+    # the following fields are all sorted by lexicographic order
     interior_dualnodes::Vector{Int}
     boundary_dualnodes::Vector{SVector{3, Int}}
     auxiliary_dualnodes::Vector{SVector{2, Int}}
@@ -261,6 +262,7 @@ mutable struct Dualvolumestruct
     interior_dualfaces::Vector{SVector{2, Int}}
     boundary_dualfaces::Vector{SVector{2, Int}}
     auxiliary_dualfaces::Vector{SVector{2, Any}}
+    #
     
     raw_volume::Float64
     Dualvolumestruct() = new()

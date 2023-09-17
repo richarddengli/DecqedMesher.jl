@@ -186,7 +186,30 @@ end
     end 
     @test isapprox(raw_area_sum, 1, rtol=0.00000001)  
 
+    # use get_dualface_2D()on primal node whose id is 5, which lies on the boundary of the mesh
+    testnode_id5 = primalmesh_2D.nodedict[5]
+    testdualface_2D_id5 = DecqedMesher.Mesher2D_Dualmesh.get_dualface_2D(testnode_id5,
+                                                                     primalmesh_2D.nodedict,
+                                                                     primalmesh_2D.edgedict,
+                                                                     primalmesh_2D.facedict_2D,
+                                                                     interior_dualedgedict_2D,
+                                                                     boundary_dualedgedict_2D,
+                                                                     auxiliary_onprimaledge_dualedgedict_2D)
 
+    @test testdualface_2D_id5.id == 5
+    @test testdualface_2D_id5.interior_dualnodes == [20, 28, 44, 56]   
+    @test testdualface_2D_id5.boundary_dualnodes == [[1, 5], [5, 6]]
+    @test testdualface_2D_id5.interior_dualedges == [[5, 21], [5, 25], [5, 29]]  
+    @test testdualface_2D_id5.boundary_dualedges == [[1, 5], [5, 6]]
+    @test testdualface_2D_id5.auxiliary_onprimaledge_dualedges == [[[1, 5], 5], [[5, 6], 5]]                                    
+
+    # println("id: ", testdualface_2D_id5.id)
+    # println("interior_dualnodes: ", testdualface_2D_id5.interior_dualnodes)
+    # println("boundary_dualnodes: ", testdualface_2D_id5.boundary_dualnodes)
+    # println("interior_dualedges: ", testdualface_2D_id5.interior_dualedges)
+    # println("boundary_dualedges: ", testdualface_2D_id5.boundary_dualedges)
+    # println("auxiliary_onprimaledge_dualedges: ", testdualface_2D_id5.auxiliary_onprimaledge_dualedges)
+    # print("raw_area: ", testdualface_2D_id5.raw_area)
 
 
     # visual checks

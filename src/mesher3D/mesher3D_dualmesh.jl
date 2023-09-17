@@ -735,6 +735,8 @@ end
                                tetdict::Dict{Int, Tetstruct})
 
 Determine the raw value of the dual area corresponding to a primal edge using Hirani's method.
+
+Hirani, A. N., Kalyanaraman, K., & VanderZee, E. B. (2013). Delaunay hodge star. Computer-Aided Design, 45(2), 540-544.
 """
 function get_dualarea_rawvalue(edge::Edgestruct,
                                nodedict::Dict{Int, Nodestruct},
@@ -842,8 +844,14 @@ end
 
 
 """
+get_dualarea_effectivevalue(edge::Edgestruct,
+                            nodedict::Dict{Int, Nodestruct},
+                            facedict::Dict{SVector{3, Int}, Facestruct}, 
+                            tetdict::Dict{Int, Tetstruct}, material::Array{Float64,1})
 
 Determine the effective value of the dual area using Hirani's method.
+
+Hirani, A. N., Kalyanaraman, K., & VanderZee, E. B. (2013). Delaunay hodge star. Computer-Aided Design, 45(2), 540-544.
 """
 function get_dualarea_effectivevalue(edge::Edgestruct,
                                      nodedict::Dict{Int, Nodestruct},
@@ -947,28 +955,6 @@ function get_dualarea_effectivevalue(edge::Edgestruct,
 
     return dualarea_value
 
-end
-
-
-"""
-    get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)
-
-Compute the raw support volumes of primal edges.
-"""
-function get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)::Float64
-
-    interioredge_key = keys(dualfacedicts.interior_dualfacedict)
-    boundaryedge_key = keys(dualfacedicts.boundary_dualfacedict) 
-
-    edge_id = edge.id
-    if edge_id in interioredge_key
-        supportvolume_raw = dualfacedicts.interior_dualfacedict[edge_id].raw_area*edge.length*1/3
-    elseif edge_id in boundaryedge_key
-        supportvolume_raw = dualfacedicts.boundary_dualfacedict[edge_id].raw_area*edge.length*1/3
-    end
-
-    return supportvolume_raw
-    
 end
 
 
@@ -1343,6 +1329,8 @@ end
                             tetdict::Dict{Int, Tetstruct})
 
 Determine the raw value of the dual volume using Hirani's method.
+
+Hirani, A. N., Kalyanaraman, K., & VanderZee, E. B. (2013). Delaunay hodge star. Computer-Aided Design, 45(2), 540-544.
 """
 function get_dualvolume_rawvalue(node::Nodestruct, 
                                  nodedict::Dict{Int, Nodestruct},
@@ -1471,7 +1459,8 @@ end
                      edgedict::Dict{SVector{2, Int}, Edgestruct})
 
 Return the vector of edges which contain node.
-This will be used in get_dualvolume() to get the list of dual faces corresponding to primal node.
+3D: This will be used in get_dualvolume() to get the list of dual faces corresponding to primal node.
+2D: This will be used in get_dualface_2D() to get the list of dual edges corresponding to primal node.
 """
 function get_edgesfornode(node::Nodestruct, 
                           edgedict::Dict{SVector{2, Int}, Edgestruct})::Vector{SVector{2, Int}}
@@ -1517,6 +1506,8 @@ function get_dualvolume(node::Nodestruct,
                         auxiliary_dualfacedict::Dict{SVector{2, Any}, Auxiliary_dualfacestruct})::Dualvolumestruct
     
     dualvolume = Dualvolumestruct()
+
+    dualvolume.id = node.id
     
     dualvolume.raw_volume = get_dualvolume_rawvalue(node, nodedict, edgedict, facedict, tetdict)
     
@@ -1524,37 +1515,34 @@ function get_dualvolume(node::Nodestruct,
     dualvolume.boundary_dualfaces = Vector{SVector{2, Int}}()
     dualvolume.auxiliary_dualfaces = Vector{SVector{2, Any}}()
 
-    # get edges containing node
+    # get primal edges containing node
     parent_edgeids = get_edgesfornode(node, edgedict)
 
     # see which dict each edge above belongs to
     for parent_edgeid in parent_edgeids
 
         if parent_edgeid in keys(boundary_dualfacedict)
-
             push!(dualvolume.boundary_dualfaces, parent_edgeid)
-        
         else
-
             push!(dualvolume.interior_dualfaces, parent_edgeid)
-        
         end
     
     end
+    sort!(dualvolume.boundary_dualfaces)
+    sort!(dualvolume.boundary_dualfaces)
 
-    # append auxiliary dual face, if its id [boundary primal face id, primal node part of that primal face] contains node
+    # append auxiliary dual face, if its id, [boundary primal face id, primal node part of that primal face], contains node
     for auxiliary_dualface_pair in auxiliary_dualfacedict
 
         auxiliary_dualface_id = auxiliary_dualface_pair.first
         nodeid = node.id
 
         if nodeid == auxiliary_dualface_id[2]
-
             push!(dualvolume.auxiliary_dualfaces, auxiliary_dualface_id)
-
         end 
-
+        
     end
+    sort(dualvolume.auxiliary_dualfaces)
 
     # complete rest of info for dual volume
 
@@ -1569,7 +1557,7 @@ function get_dualvolume(node::Nodestruct,
         union!(all_interior_dualnodes, Set(interior_dualfacedict[interior_dualfaceid].interior_dualnodes))
     end
 
-    dualvolume.interior_dualnodes = collect(all_interior_dualnodes) #convert back to vector
+    dualvolume.interior_dualnodes = sort(collect(all_interior_dualnodes)) # convert back to vector
 
     # get all boundary dual nodes, by looping over each of the dual volume's
     # boundary_dualface [auxiliary dual node, boundary dual node 1, interior dual nodes ..., boundary dual node 2]
@@ -1584,9 +1572,7 @@ function get_dualvolume(node::Nodestruct,
         union!(all_boundary_dualnodes, Set(auxiliary_dualfacedict[auxiliary_dualfaceid].dualnodes[[3]]))
     end
     
-
-    # println(all_boundary_dualnodes)
-    dualvolume.boundary_dualnodes = collect(all_boundary_dualnodes)
+    dualvolume.boundary_dualnodes = sort(collect(all_boundary_dualnodes))
     
     # get auxiliary dual nodes, by looping over each of the dual volume's
     # boundary_dualface [auxiliary dual node, boundary dual node 1, interior dual nodes ..., boundary dual node 2]
@@ -1603,7 +1589,7 @@ function get_dualvolume(node::Nodestruct,
     end
     
 
-    dualvolume.auxiliary_dualnodes = collect(all_auxiliary_dualnodes)
+    dualvolume.auxiliary_dualnodes = sort(collect(all_auxiliary_dualnodes))
 
     # get interior_dualedges, by looping over each of the dual volume's
     # interior dual face
@@ -1617,7 +1603,7 @@ function get_dualvolume(node::Nodestruct,
         union!(all_interior_dualedges, Set(boundary_dualfacedict[boundary_dualfaceid].interior_dualedges))
     end 
 
-    dualvolume.interior_dualedges = collect(all_interior_dualedges)
+    dualvolume.interior_dualedges = sort(collect(all_interior_dualedges))
 
     # get boundary_dualedges, by looping over each of the dual volume's
     # boundary_dualface
@@ -1627,7 +1613,7 @@ function get_dualvolume(node::Nodestruct,
         union!(all_boundary_dualedges, Set(boundary_dualfacedict[boundary_dualfaceid].boundary_dualedges))
     end
 
-    dualvolume.boundary_dualedges = collect(all_boundary_dualedges)
+    dualvolume.boundary_dualedges = sort(collect(all_boundary_dualedges))
 
     # get auxiliary_onprimalface_dualedges, by looping over each of the dual volume's
     # boundary_dualface
@@ -1641,7 +1627,7 @@ function get_dualvolume(node::Nodestruct,
         union!(all_auxiliary_onprimalface_dualedges, Set(auxiliary_dualfacedict[auxiliary_dualfaceid].auxiliary_onprimalface_dualedges))
     end
 
-    dualvolume.auxiliary_onprimalface_dualedges = collect(all_auxiliary_onprimalface_dualedges)
+    dualvolume.auxiliary_onprimalface_dualedges = sort(collect(all_auxiliary_onprimalface_dualedges))
 
     # get auxiliary_onprimaledge_dualedges, by looping over each of the dual volume's
     # auxiliary_dualface
@@ -1651,7 +1637,7 @@ function get_dualvolume(node::Nodestruct,
         union!(all_auxiliary_onprimaledge_dualedges, Set(auxiliary_dualfacedict[auxiliary_dualfaceid].auxiliary_onprimaledge_dualedges))
     end
 
-    dualvolume.auxiliary_onprimaledge_dualedges = collect(all_auxiliary_onprimaledge_dualedges)
+    dualvolume.auxiliary_onprimaledge_dualedges = sort(collect(all_auxiliary_onprimaledge_dualedges))
 
     return dualvolume
 
@@ -1704,6 +1690,28 @@ end
 
 
 ########################################### START DUAL MESH ###########################################
+"""
+    get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)
+
+Compute the raw support volumes of primal edges.
+"""
+function get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)::Float64
+
+    interioredge_key = keys(dualfacedicts.interior_dualfacedict)
+    boundaryedge_key = keys(dualfacedicts.boundary_dualfacedict) 
+
+    edge_id = edge.id
+    if edge_id in interioredge_key
+        supportvolume_raw = dualfacedicts.interior_dualfacedict[edge_id].raw_area*edge.length*1/3
+    elseif edge_id in boundaryedge_key
+        supportvolume_raw = dualfacedicts.boundary_dualfacedict[edge_id].raw_area*edge.length*1/3
+    end
+
+    return supportvolume_raw
+    
+end
+
+
 """
     complete_dualmesh(file::String)
 

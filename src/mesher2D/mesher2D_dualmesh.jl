@@ -1,6 +1,6 @@
 module  Mesher2D_Dualmesh
 
-using ..Mesher3D_Dualmesh: get_midpoint_edge, get_area_triangle
+using ..Mesher3D_Dualmesh: get_midpoint_edge, get_area_triangle, get_edgesfornode
 # functionality that are not imported from mesher3D but have a mesher2D analogue are listed in the following table: 
 # ____________________________________________
 # mesher3D implementation | mesher2D analogue
@@ -328,6 +328,8 @@ end
                              facedict_2D::Dict{Int, Facestruct_2D})
 
 Determine the raw value of the dual area corresponding to a primal node using Hirani's method.
+
+Hirani, A. N., Kalyanaraman, K., & VanderZee, E. B. (2013). Delaunay hodge star. Computer-Aided Design, 45(2), 540-544.
 """
 function get_dualarea_rawvalue_2D(node::Nodestruct,
                                   nodedict::Dict{Int, Nodestruct},
@@ -415,6 +417,78 @@ function get_dualarea_rawvalue_2D(node::Nodestruct,
 
 end
 
+
+function get_dualface_2D(node::Nodestruct, 
+                         nodedict::Dict{Int, Nodestruct},
+                         edgedict::Dict{SVector{2, Int}, Edgestruct}, 
+                         facedict_2D::Dict{Int, Facestruct_2D}, 
+                         interior_dualedgedict_2D::Dict{SVector{2, Int}, Interior_dualedgestruct_2D},  
+                         boundary_dualedgedict_2D::Dict{SVector{2, Int}, Boundary_dualedgestruct_2D},
+                         auxiliary_onprimaledge_dualedgedict_2D::Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct_2D})::Dualfacestruct_2D
+
+    dualface_2D = Dualfacestruct_2D()
+
+    dualface_2D.id = node.id
+
+    dualface_2D.raw_area = get_dualarea_rawvalue_2D(node, nodedict, edgedict, facedict_2D)
+
+    dualface_2D.interior_dualedges = Vector{SVector{2, Int}}()
+    dualface_2D.boundary_dualedges = Vector{SVector{2, Int}}()
+    dualface_2D.auxiliary_onprimaledge_dualedges = Vector{SVector{2, Any}}()
+
+    # get primal edges containing node
+    parent_edgeids = get_edgesfornode(node, edgedict)
+
+    # see which dict each edge above belongs to
+    for parent_edgeid in parent_edgeids
+
+        if parent_edgeid in keys(boundary_dualedgedict_2D)
+            push!(dualface_2D.boundary_dualedges, parent_edgeid)
+        else
+            push!(dualface_2D.interior_dualedges, parent_edgeid)
+        end
+
+    end
+    sort!(dualface_2D.boundary_dualedges)
+    sort!(dualface_2D.interior_dualedges)
+
+    # append auxiliary (on primal edge) dual edge, if its id, [boundary primal edge id, primal node part of that primal edge], contains node
+    for auxiliary_onprimaledge_dualedge_2D_pair in auxiliary_onprimaledge_dualedgedict_2D
+
+        auxiliary_onprimaledge_dualedge_2D_id = auxiliary_onprimaledge_dualedge_2D_pair.first
+        nodeid = node.id
+
+        if nodeid == auxiliary_onprimaledge_dualedge_2D_id[2]
+            push!(dualface_2D.auxiliary_onprimaledge_dualedges, auxiliary_onprimaledge_dualedge_2D_id)
+        end 
+
+    end
+    sort!(dualface_2D.auxiliary_onprimaledge_dualedges)
+
+    # complete rest of info for dual face
+
+    # get all interior dual nodes, by looping over each of the dual face's
+    # interior dual edges
+    # and retrieving the interior dual nodes
+    # use union of sets to only include unique elements 
+    all_interior_dualnodes = Set([])
+
+    for interior_dualedge_id in dualface_2D.interior_dualedges   
+        union!(all_interior_dualnodes, Set(interior_dualedgedict_2D[interior_dualedge_id].dualnodes))
+    end
+
+    dualface_2D.interior_dualnodes = sort(collect(all_interior_dualnodes)) # convert back to vector
+    
+
+
+    # in 2D case, boundary_dualnodes is simply the same as boundary_dualedges
+    dualface_2D.boundary_dualnodes = dualface_2D.boundary_dualedges
+    # moreover, unlike 3D case, it is not necessary to loop over the auxiliary_onprimaledge_dualedges because all 
+    # boundary dual nodes are already found above
+
+    return dualface_2D
+
+end
 ############################ END DUAL FACES ############################
 
 

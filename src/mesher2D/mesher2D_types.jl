@@ -122,12 +122,14 @@ end
 mutable struct Dualfacestruct_2D
     id::Int # primal node id
 
+    # the following fields are all sorted by lexicographic order
     interior_dualnodes::Vector{Int}
     boundary_dualnodes::Vector{SVector{2, Int}}
 
     interior_dualedges::Vector{SVector{2, Int}}
     boundary_dualedges::Vector{SVector{2, Int}}
     auxiliary_onprimaledge_dualedges::Vector{SVector{2, Any}}
+    #
     
     raw_area::Float64
     Dualfacestruct_2D() = new()
