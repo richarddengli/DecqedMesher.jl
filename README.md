@@ -38,7 +38,7 @@ to activate the package and prepare the project environment.
 <h1 align="center"> Usage </h1>
 
 ## Making the primal and dual mesh
-The 2 user-facing functions in `DecqedMesher.jl` are `complete_dualmesh()` and `complete_dualmesh_2D()`, which take in as input a `.msh` file representing 3D and 2D primal mesh, respectively, and return a length 4 tuple of structs containing the following information corresponding to the `.msh` file:
+The 2 user-facing functions in `DecqedMesher.jl` are `complete_dualmesh()` and `complete_dualmesh_2D()`. Each takes a `.msh` file representing 3D and 2D primal mesh as input, respectively, and returns a length 4 tuple of structs containing the following information corresponding to the `.msh` file:
 1. dual mesh information
 2. primal mesh information (parsed from  `.msh` and updated with certain information)
 3. physical group names (parsed unchanged from  `.msh`)
