@@ -56,7 +56,7 @@ dualmesh_3D, primalmesh_3D, physicalnames_dict_3D, all_entities_struct_3D = comp
 
 Similarly, to construct the dual mesh of a 2D mesh, use `complete_dualmesh_2D("[/path/to/mesh]")`. For example, for a mesh file named `2D_testmesh.msh`, use:
 ```julia
-dualmesh_2D, primalmesh_2D, physicalnames_dict_2D, all_entities_struct_2D = complete_dualmesh("/2D_testmesh.msh")
+dualmesh_2D, primalmesh_2D, physicalnames_dict_2D, all_entities_struct_2D = complete_dualmesh_2D("/2D_testmesh.msh")
 ```
 
 All other functions are not intended to be user-facing, and thus must be executed via a qualified call; for example, `DecqedMesher.Mesher3D_Dualmesh.get_supportvolume()`.
