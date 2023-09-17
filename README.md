@@ -10,25 +10,45 @@ A detailed presentation of DEC-QED, its applications for modeling electromagneti
 - [Spectral Theory for Non-linear Superconducting Microwave Systems: Extracting Relaxation Rates and Mode Hybridization](https://arxiv.org/abs/2309.03435)
 
 # Installation
-In the command prompt, navigate to the desired directory via `cd`, and then clone the package:
+`DecqedMesher.jl` is not currently registered in the official [Julia package registry](https://github.com/JuliaRegistries/General), but installation is simple and follows the directions listed [here](https://pkgdocs.julialang.org/v1/environments/#Using-someone-else's-project).
+
+In the command prompt, navigate to the desired directory (via `cd`), and then clone the package via:
 ```
-git clone https://github.com/richarddengli/DecqedMesher
+(shell) git clone https://github.com/richarddengli/DecqedMesher.jl.git
 ```
 
-Start a Julia REPL and then enter into Pkg REPL. Then activate the package & make sure it is ready to use by running
+Start the Julia REPL and then enter into Pkg REPL (by typing `]`). Then call:
 ```
 (@v1.9) pkg> activate DecqedMesher.jl
-Activating project at `~/DecqedMesher.jl`
 ```
 
-and also:
+and also call:
 ```
 (DecqedMesher) pkg> instantiate
-  No Changes to `~/DecqedMesher.jl/Project.toml`
-  No Changes to `~/DecqedMesher.jl/Manifest.toml`
 ```
-# Usage
+to activate the package and prepare the project environment.
 
+# Usage
+The 2 user-facing functions in `DecqedMesher.jl` are `complete_dualmesh()` and `complete_dualmesh_2D()`, which take in as input a `.msh` file representing 3D and 2D meshes, respectively. Both functions return a length 4 tuple, containing the following information corresponding to the `.msh` file:
+1. dual mesh information
+2. primal mesh information
+3. physical group names
+4. elementary entities
+
+In a `.jl` file, import `DecqedMesher.jl`:
+```julia
+.using DecqedMesher
+```
+
+To construct the dual mesh of a 3D mesh, use `complete_dualmesh("[/path/to/mesh]")`. For example, for a mesh file named `3D_testmesh.msh` in the current directory, use:
+```julia
+dualmesh, primalmesh, physicalnames_dict, all_entities_struct = complete_dualmesh("/3D_testmesh.msh")
+```
+
+Similarly, to construct the dual mesh of a 2D mesh, use `complete_dualmesh_2D("[/path/to/mesh]")`. For example, for a mesh file named `2D_testmesh.msh` in the current directory, use:
+```julia
+dualmesh, primalmesh, physicalnames_dict, all_entities_struct = complete_dualmesh("/3D_testmesh.msh")
+```
 
 # Authors and Acknowledgements
 Richard Li, Dzung Pham, Nick Bronn, Thomas McConkey, Olivia Lanes, Hakan Türeci
