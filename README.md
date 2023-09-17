@@ -1,4 +1,4 @@
-# DecqedMesher.jl
+<h1 align="center"> DecqedMesher.jl </h1>
 
 [![Build Status](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/richarddengli/DecqedMesher/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/richarddengli/DecqedMesher/branch/main/graph/badge.svg)](https://codecov.io/gh/richarddengli/DecqedMesher)
@@ -9,7 +9,7 @@ A detailed presentation of DEC-QED, its applications for modeling electromagneti
 - [Flux-based three-dimensional electrodynamic modeling approach to superconducting circuits and materials](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.107.053704)
 - [Spectral Theory for Non-linear Superconducting Microwave Systems: Extracting Relaxation Rates and Mode Hybridization](https://arxiv.org/abs/2309.03435)
 
-# Installation
+<h1 align="center"> Installation </h1>
 `DecqedMesher.jl` is not currently registered in the official [Julia package registry](https://github.com/JuliaRegistries/General), but installing it is simple and follows the directions listed [here](https://pkgdocs.julialang.org/v1/environments/#Using-someone-else's-project).
 
 In the command prompt, navigate to the desired directory (via `cd`), and then clone the package via:
@@ -28,7 +28,7 @@ and also call:
 ```
 to activate the package and prepare the project environment.
 
-# Usage
+<h1 align="center"> Usage </h1>
 ## Making the primal and dual mesh
 The 2 user-facing functions in `DecqedMesher.jl` are `complete_dualmesh()` and `complete_dualmesh_2D()`, which take in as input a `.msh` file representing 3D and 2D primal mesh, respectively, and return a length 4 tuple of structs containing the following information corresponding to the `.msh` file:
 1. dual mesh information
@@ -66,7 +66,7 @@ dualmesh_2D.dualfacedict_2D[5].boundary_dualedges
 
 To determine the precise form of the call, inspect the hierarchy of data types defined in `mesher3D_types.jl` and `mesher2D_types.jl`. Please note that there are slight differences in somes definitions between the two files. For instance, `mesher2D_types.jl` defines some fields with the additional suffix `_2D` compared to the 3D definitions, as shown by the above example.
 
-# Authors and Acknowledgements
+<h1 align="center"> Authors and Acknowledgements </h1>
 Richard Li, Dzung Pham, Nick Bronn, Thomas McConkey, Olivia Lanes, Hakan Türeci
 
 The development for ``DecqedMesher.jl`` started during the 2022 Undergraduate Research Internship at IBM and Princeton (QURIP), as part of a collaboration between the following groups:
