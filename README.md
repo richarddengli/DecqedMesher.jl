@@ -10,7 +10,7 @@ A detailed presentation of DEC-QED, its applications for modeling electromagneti
 - [Spectral Theory for Non-linear Superconducting Microwave Systems: Extracting Relaxation Rates and Mode Hybridization](https://arxiv.org/abs/2309.03435)
 
 # Installation
-`DecqedMesher.jl` is not currently registered in the official [Julia package registry](https://github.com/JuliaRegistries/General), but installation is simple and follows the directions listed [here](https://pkgdocs.julialang.org/v1/environments/#Using-someone-else's-project).
+`DecqedMesher.jl` is not currently registered in the official [Julia package registry](https://github.com/JuliaRegistries/General), but installing it is simple and follows the directions listed [here](https://pkgdocs.julialang.org/v1/environments/#Using-someone-else's-project).
 
 In the command prompt, navigate to the desired directory (via `cd`), and then clone the package via:
 ```
