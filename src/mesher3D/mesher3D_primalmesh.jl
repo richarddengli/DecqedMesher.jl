@@ -209,7 +209,7 @@ end
 """
     complete_primalmesh(file::String)
 
-Returns the 4 completed primal mesh dictionaries.
+Returns the 4 completed primal mesh dictionaries (in one struct), physicalnames_dict, and all_entities_struct.
 """
 function complete_primalmesh(file::String)
 

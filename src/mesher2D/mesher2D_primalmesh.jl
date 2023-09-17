@@ -1,4 +1,5 @@
 module  Mesher2D_Primalmesh
+export complete_primalmesh_2D
 
 using ..Mesher3D_Primalmesh: getedgelen
 # not included: getfacearea, gettetvol, complete_update_tet, edge2entities_map, complete_primalmesh

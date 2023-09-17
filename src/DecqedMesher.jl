@@ -1,5 +1,6 @@
 module DecqedMesher
 
+########################################### START 3D Mesher ###########################################
 include("./mesher3D/mesher3D_types.jl")
 include("./mesher3D/mesher3D_parse.jl")
 include("./mesher3D/mesher3D_primalmesh.jl")
@@ -20,12 +21,17 @@ export complete_dualmesh
 # using DecqedMesher (if package has not been imported yet)
 # DecqedMesher.Mesher3D_Primalmesh.complete_primalmesh()
 # ---
+########################################### END 3D Mesher ###########################################
 
+########################################### START 2D Mesher ###########################################
 include("./mesher2D/mesher2D_types.jl")
 include("./mesher2D/mesher2D_parse.jl")
 include("./mesher2D/mesher2D_primalmesh.jl")
 include("./mesher2D/mesher2D_dualmesh.jl")
 
-# using .Mesher2D_Dualmesh
+using .Mesher2D_Dualmesh: complete_dualmesh_2D
+
+export complete_dualmesh_2D
+########################################### END 2D Mesher ###########################################
 
 end 

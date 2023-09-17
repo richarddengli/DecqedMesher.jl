@@ -15,6 +15,9 @@ using ..Mesher3D_Dualmesh: get_midpoint_edge, get_area_triangle, get_edgesfornod
 # create_auxiliary_onprimaledge_dualedgedict, create_auxiliary_onprimalface_dualedgedict | create_auxiliary_onprimaledge_dualedgedict_2D
 # create_dualedgedicts | create_dualedgedicts_2D
 # get_dualarea_rawvalue, get_dualvolume_rawvalue | get_dualarea_rawvalue_2D
+# get_dualvolume | get_dualface_2D
+# create_dualvolumedict | create_dualfacedict_2D
+# complete_dualmesh | complete_dualmesh_2D
 
 using ..Mesher2D_Types
 using ..Mesher2D_Parse
@@ -487,8 +490,126 @@ function get_dualface_2D(node::Nodestruct,
     return dualface_2D
 
 end
+
+
+"""
+    function create_dualfacedict_2D(nodedict::Dict{Int, Nodestruct}, 
+                                    edgedict::Dict{SVector{2, Int}, Edgestruct}, 
+                                    facedict_2D::Dict{Int, Facestruct_2D}, 
+                                    interior_dualedgedict_2D::Dict{SVector{2, Int}, Interior_dualedgestruct_2D},  
+                                    boundary_dualedgedict_2D::Dict{SVector{2, Int}, Boundary_dualedgestruct_2D},
+                                    auxiliary_onprimaledge_dualedgedict_2D::Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct_2D})
+
+Create dictionary of dual faces.
+"""
+function create_dualfacedict_2D(nodedict::Dict{Int, Nodestruct}, 
+                                edgedict::Dict{SVector{2, Int}, Edgestruct}, 
+                                facedict_2D::Dict{Int, Facestruct_2D}, 
+                                interior_dualedgedict_2D::Dict{SVector{2, Int}, Interior_dualedgestruct_2D},  
+                                boundary_dualedgedict_2D::Dict{SVector{2, Int}, Boundary_dualedgestruct_2D},
+                                auxiliary_onprimaledge_dualedgedict_2D::Dict{SVector{2, Any}, Auxiliary_onprimaledge_dualedgestruct_2D})::Dict{Int, Dualfacestruct_2D}
+
+    dualfacedict_2D = Dict{Int, Dualfacestruct_2D}()
+
+    for nodepair in nodedict
+
+        nodeid = nodepair.first
+        node = nodepair.second
+
+        dualface_2D = get_dualface_2D(node, 
+                                     nodedict,
+                                     edgedict, 
+                                     facedict_2D, 
+                                     interior_dualedgedict_2D,
+                                     boundary_dualedgedict_2D,
+                                     auxiliary_onprimaledge_dualedgedict_2D)
+
+        dualfacedict_2D[nodeid] = dualface_2D
+
+    end
+
+    return dualfacedict_2D
+
+end
 ############################ END DUAL FACES ############################
 
+############################ START DUAL MESH ############################
+"""
+    get_supportarea_2D(edge::Edgestruct, dualedgedicts_2D::Dualedgedicts_struct_2D)
+
+Compute the raw support area of primal edges.
+
+Area of a rhombus is pq/2, where p,q, are the length of the diagonals. 
+- For an interior primal edge, the raw support area is (length of interior dual edge)*(length of primal edge)/2.
+- For a boundary primal edge, the raw support area is half of a rhombus (a triangle), but the formula (length of boundary dual edge)*(length of primal edge)/2
+is the same given that the boundary dual edge does not extend beyond the mesh boundary.
+The identical line of reasoning holds in get_supportvolume() in 3D.
+"""
+function get_supportarea_2D(edge::Edgestruct, dualedgedicts_2D::Dualedgedicts_struct_2D)::Float64
+
+    interioredge_key = keys(dualedgedicts_2D.interior_dualedgedict_2D)
+    boundaryedge_key = keys(dualedgedicts_2D.boundary_dualedgedict_2D) 
+
+    edge_id = edge.id
+    if edge_id in interioredge_key
+        supportarea_raw = dualedgedicts_2D.interior_dualedgedict_2D[edge_id].length*edge.length*1/2
+    elseif edge_id in boundaryedge_key
+        supportarea_raw = dualedgedicts_2D.boundary_dualedgedict_2D[edge_id].length*edge.length*1/2
+    end
+
+    return supportarea_raw
+    
+end
+
+
+"""
+    complete_dualmesh_2D(file::String)
+
+Returns all completed dual mesh dictionaries (in one dict), updated primal mesh with primal edge's support area, unchanged physicalnames_dict, and unchanged all_entities_struct.
+"""
+function complete_dualmesh_2D(file::String)
+
+    primalmesh_2D, physicalnames_dict, all_entities_struct = complete_primalmesh_2D(file::String)
+
+    nodedict = primalmesh_2D.nodedict
+    edgedict = primalmesh_2D.edgedict
+    facedict_2D = primalmesh_2D.facedict_2D
+
+    dualmesh_2D = Dualmeshstruct_2D() 
+
+    # create dualnodedicts & insert into dual mesh
+    dualnodedicts_2D = create_dualnodedicts_2D(nodedict, edgedict, facedict_2D)
+    dualmesh_2D.dualnodedicts_2D = dualnodedicts_2D
+
+    # create dualedgedicts & insert into dual mesh
+    dualedgedicts_2D =  create_dualedgedicts_2D(nodedict, 
+                                                edgedict,
+                                                facedict_2D, 
+                                                dualnodedicts_2D.interior_dualnodedict_2D, 
+                                                dualnodedicts_2D.boundary_dualnodedict_2D)
+    dualmesh_2D.dualedgedicts_2D = dualedgedicts_2D
+    
+    # create dualfacedict & insert into dual mesh
+    dualfacedict_2D = create_dualfacedict_2D(nodedict, 
+                                             edgedict, 
+                                             facedict_2D, 
+                                             dualedgedicts_2D.interior_dualedgedict_2D,  
+                                             dualedgedicts_2D.boundary_dualedgedict_2D,
+                                             dualedgedicts_2D.auxiliary_onprimaledge_dualedgedict_2D)
+    dualmesh_2D.dualfacedict_2D = dualfacedict_2D
+
+    # compute raw support areas for primal edges
+    for edgeid in keys(edgedict)
+        edgedict[edgeid].supportvolume = get_supportarea_2D(edgedict[edgeid], dualedgedicts_2D)
+    end
+
+    # update edgedict
+    primalmesh_2D.edgedict = edgedict
+
+    return dualmesh_2D, primalmesh_2D, physicalnames_dict, all_entities_struct
+
+end
+############################ END DUAL MESH ############################
 
 
 end

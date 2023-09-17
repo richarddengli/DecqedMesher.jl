@@ -1694,6 +1694,9 @@ end
     get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)
 
 Compute the raw support volumes of primal edges.
+
+Area of a pyramid is Ah/3, where A is the base area and h the height. A dual volume can be considered as two pyramids, and hence has a volume
+of 2*(base*height/3) = 2*(area of dual face * (1/2 * length of primal edge) / 3) = area of dual face * length of primal edge / 3.
 """
 function get_supportvolume(edge::Edgestruct, dualfacedicts::Dualfacedicts_struct)::Float64
 
@@ -1715,7 +1718,7 @@ end
 """
     complete_dualmesh(file::String)
 
-Returns all completed dual mesh dictionaries (in one dict), updated primal mesh with primal edge's support volumes, unchanged physicalnames_dict, and unchanged all_entities_struct.
+Returns all completed dual mesh dictionaries (in one struct), updated primal mesh with primal edge's support volumes, unchanged physicalnames_dict, and unchanged all_entities_struct.
 """
 function complete_dualmesh(file::String)
 
