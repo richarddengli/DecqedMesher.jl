@@ -479,8 +479,6 @@ function get_dualface_2D(node::Nodestruct,
 
     dualface_2D.interior_dualnodes = sort(collect(all_interior_dualnodes)) # convert back to vector
     
-
-
     # in 2D case, boundary_dualnodes is simply the same as boundary_dualedges
     dualface_2D.boundary_dualnodes = dualface_2D.boundary_dualedges
     # moreover, unlike 3D case, it is not necessary to loop over the auxiliary_onprimaledge_dualedges because all 

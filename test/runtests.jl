@@ -201,16 +201,23 @@ end
     @test testdualface_2D_id5.boundary_dualnodes == [[1, 5], [5, 6]]
     @test testdualface_2D_id5.interior_dualedges == [[5, 21], [5, 25], [5, 29]]  
     @test testdualface_2D_id5.boundary_dualedges == [[1, 5], [5, 6]]
-    @test testdualface_2D_id5.auxiliary_onprimaledge_dualedges == [[[1, 5], 5], [[5, 6], 5]]                                    
+    @test testdualface_2D_id5.auxiliary_onprimaledge_dualedges == [[[1, 5], 5], [[5, 6], 5]]
 
-    # println("id: ", testdualface_2D_id5.id)
-    # println("interior_dualnodes: ", testdualface_2D_id5.interior_dualnodes)
-    # println("boundary_dualnodes: ", testdualface_2D_id5.boundary_dualnodes)
-    # println("interior_dualedges: ", testdualface_2D_id5.interior_dualedges)
-    # println("boundary_dualedges: ", testdualface_2D_id5.boundary_dualedges)
-    # println("auxiliary_onprimaledge_dualedges: ", testdualface_2D_id5.auxiliary_onprimaledge_dualedges)
-    # print("raw_area: ", testdualface_2D_id5.raw_area)
-
+    # use get_dualface_2D()on primal node whose id is 17, which lies on the interior of the mesh
+    testnode_id17 = primalmesh_2D.nodedict[17]
+    testdualface_2D_id17 = DecqedMesher.Mesher2D_Dualmesh.get_dualface_2D(testnode_id17,
+                                                                          primalmesh_2D.nodedict,
+                                                                          primalmesh_2D.edgedict,
+                                                                          primalmesh_2D.facedict_2D,
+                                                                          interior_dualedgedict_2D,
+                                                                          boundary_dualedgedict_2D,
+                                                                          auxiliary_onprimaledge_dualedgedict_2D)
+    @test testdualface_2D_id17.id == 17
+    @test testdualface_2D_id17.interior_dualnodes == [33, 34, 35, 36, 37, 38, 39, 40]   
+    @test testdualface_2D_id17.boundary_dualnodes == []
+    @test testdualface_2D_id17.interior_dualedges == [[17, 18], [17, 19], [17, 20], [17, 21], [17, 22], [17, 23], [17, 24], [17, 25]]
+    @test testdualface_2D_id17.boundary_dualedges == []
+    @test testdualface_2D_id17.auxiliary_onprimaledge_dualedges == []
 
     # visual checks
     using Plots
