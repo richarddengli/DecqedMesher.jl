@@ -242,12 +242,15 @@ end
         raw_support_area_sum += support_area
     end 
     @test isapprox(raw_support_area_sum, 1, rtol=0.000000001)  
+    println(raw_support_area_sum)
 
     # complete_dualmesh_2D()
     dualmesh_2D, primalmesh_2D, physicalnames_dict, all_entities_struct = complete_dualmesh_2D(testfile_2D)
 
     # visual checks
     using Plots
+
+    plot()
 
     # dual node plots
     coords_list = []
@@ -258,7 +261,7 @@ end
     x_coords = [point[1] for point in coords_list]
     y_coords = [point[2] for point in coords_list]
     scatter(x_coords, y_coords, legend=false)
-    savefig("interior dual nodes")
+    savefig("./testfigs/interior dual nodes")
 
     coords_list = []
     for boundary_dualnode_2D_pair in boundary_dualnodedict_2D
@@ -268,7 +271,7 @@ end
     x_coords = [point[1] for point in coords_list]
     y_coords = [point[2] for point in coords_list]
     scatter(x_coords, y_coords, legend=false)
-    savefig("boundary dual nodes")
+    savefig("./testfigs/boundary dual nodes")
 
     # interior dual edge plots with interior dual nodes
     plot()
@@ -288,7 +291,7 @@ end
         coord2 = interior_dualnodedict_2D[dualnode_ids[2]].coords
         plot!([coord1[1], coord2[1]], [coord1[2], coord2[2]], legend=false, color="purple")
     end 
-    savefig("interior dual edges")
+    savefig("./testfigs/interior dual edges")
 
     # boundary dual edge plots with boundary dual nodes
     plot()
@@ -308,7 +311,7 @@ end
         coord2 = boundary_dualnodedict_2D[dualnode_ids[2]].coords
         plot!([coord1[1], coord2[1]], [coord1[2], coord2[2]], legend=false, color="purple")
     end 
-    savefig("boundary dual edges")
+    savefig("./testfigs/boundary dual edges")
 
     # auxiliary (on primal edge) dual edges with boundary dual nodes and primal nodes
     plot()
@@ -337,6 +340,6 @@ end
         coord2 = primalmesh_2D.nodedict[dualnode_ids[2]].coords
         plot!([coord1[1], coord2[1]], [coord1[2], coord2[2]], legend=false, color="purple")
     end 
-    savefig("auxiliary (on primal edge) dual edges")
+    savefig("./testfigs/auxiliary (on primal edge) dual edges")
     
 end 

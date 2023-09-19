@@ -847,7 +847,8 @@ end
 get_dualarea_effectivevalue(edge::Edgestruct,
                             nodedict::Dict{Int, Nodestruct},
                             facedict::Dict{SVector{3, Int}, Facestruct}, 
-                            tetdict::Dict{Int, Tetstruct}, material::Array{Float64,1})
+                            tetdict::Dict{Int, Tetstruct}, 
+                            material::Array{Float64,1})
 
 Determine the effective value of the dual area using Hirani's method.
 
@@ -856,7 +857,8 @@ Hirani, A. N., Kalyanaraman, K., & VanderZee, E. B. (2013). Delaunay hodge star.
 function get_dualarea_effectivevalue(edge::Edgestruct,
                                      nodedict::Dict{Int, Nodestruct},
                                      facedict::Dict{SVector{3, Int}, Facestruct}, 
-                                     tetdict::Dict{Int, Tetstruct}, material::Array{Float64,1})::Float64
+                                     tetdict::Dict{Int, Tetstruct}, 
+                                     material::Array{Float64,1})::Float64
 
     dualarea_value = 0
 
